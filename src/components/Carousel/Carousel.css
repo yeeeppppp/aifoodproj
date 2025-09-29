@@ -10,24 +10,17 @@
 .carousel-container {
     position: relative;
     width: 100%;
-    overflow: hidden; /* ← скрываем всё, что выходит за границы */
+    overflow: hidden;
 }
 
 .milk-stuff {
     padding-left: 45px;
-    padding-top: 25px; 
-    margin-right: 525px;
-
-    font-family: var(--font-family);
-    font-weight: 900;
-    font-size: 30px;
-
-    color: #fff;
-
-    flex-direction: row;
-    justify-content: space-between;
+    padding-top: 25px;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    transition: transform 0.3s ease-in-out;
+    will-change: transform;
+    width: max-content; 
 }
 
 .product-container {
@@ -37,6 +30,12 @@
     background: #42413f;
     margin-top: 25px;
     position: relative;
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+
+.product-container:last-child {
+    margin-right: 0;
 }
 
 .egg {
@@ -61,6 +60,21 @@
     z-index: 3;
     display: flex;
     justify-content: center;
-    margin-left: 1335px;
+    margin-left: 1410px;
     transform: translateY(-420%);
+}
+
+.carousel-viewport {
+    width: calc(5 * (255px + 25px)); 
+    overflow: hidden;
+    margin-left: 45px;
+}
+
+.price {
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 30px;
+    color: #65ad55;
+
+    margin-left: 8px;
 }
