@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import "./LLamaChat.css"
 
 function LLamaChat() {
     const [messages, setMessages] = useState([]);
