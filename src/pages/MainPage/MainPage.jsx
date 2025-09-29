@@ -2,7 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import Navigation from '../../components/Navigation/Navigation';
-import Carousel from '../../components/CarouselMilk/CarouselMilk';
+import CarouselVeg from '../../components/CarouselVeg/CarouselVeg';
+import Carousel from '../../components/Carousel/Carousel';
+import CarouselBer from '../../components/CarouselBer/CarouselBer';
 
 function MainPage() {
   return (
@@ -12,6 +14,8 @@ function MainPage() {
       </Helmet>
     <Navigation></Navigation>
     <Carousel></Carousel>
+    <CarouselVeg></CarouselVeg>
+    <CarouselBer></CarouselBer>
     </>
   );
 }
