@@ -1,3 +1,66 @@
-h1 {
+.nameOfRow {
     color: rgb(255, 255, 255);
+    font-family: var(--font-family);
+    font-weight: 900;
+    font-size: 30px;
+    padding-left: 35px;
+    padding-top: 25px;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* ← скрываем всё, что выходит за границы */
+}
+
+.milk-stuff {
+    padding-left: 45px;
+    padding-top: 25px; 
+    margin-right: 525px;
+
+    font-family: var(--font-family);
+    font-weight: 900;
+    font-size: 30px;
+
+    color: #fff;
+
+    flex-direction: row;
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-container {
+    border-radius: 15px;
+    width: 255px;
+    height: 366px;
+    background: #42413f;
+    margin-top: 25px;
+    position: relative;
+}
+
+.egg {
+    margin-left: 8px;
+    margin-top: 8px;
+    z-index: 1;
+    position: relative;
+}
+
+.discount {
+    position: absolute;
+    z-index: 2;
+    margin-top: 15px;
+    margin-left: 195px;
+}
+
+.carousel-btn {
+    position: absolute;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    margin-left: 1335px;
+    transform: translateY(-420%);
 }

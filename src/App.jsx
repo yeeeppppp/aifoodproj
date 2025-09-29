@@ -5,15 +5,13 @@ import Carousel from './components/Carousel/Carousel';
 
 function App() {
   return (
-    <>
     <Router>
       <div>
         <Routes>
-          <Route path='/Carousel' element={<Carousel/>}/>
+          <Route path='/' element={<Carousel/>}/>
         </Routes>
       </div>
     </Router>
-    </>
   );
 }
 
