@@ -3,6 +3,7 @@ import "./Navigation.css"
 export default function Navigation(){
     return(
         <>
+        {/* НАВИГАЦИЯ */}
             <div className="navigation-container">
                 <div className="left-side-navigation">
                     <a href="/">
