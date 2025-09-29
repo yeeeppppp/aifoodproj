@@ -3,7 +3,7 @@
     font-family: var(--font-family);
     font-weight: 900;
     font-size: 30px;
-    padding-left: 35px;
+    margin-left: 80px;
     padding-top: 25px;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .milk-stuff {
-    padding-left: 45px;
+    margin-left: 50px;
     padding-top: 25px;
     display: flex;
     flex-wrap: nowrap;
@@ -77,4 +77,54 @@
     color: #65ad55;
 
     margin-left: 8px;
+}
+
+.oldPrice {
+    position: relative;
+    display: inline-block;
+}
+
+.oldPrice::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -10%;
+    width: 40px;
+    height: 1px; /* толщина линии */
+    background: #787878;
+    transform-origin: center;
+}
+
+span {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    color: #787878;
+    margin-left: 5px;
+}
+
+.Name {
+    margin-top: 5px;
+    margin-left: 8px;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: #fff;
+}
+
+.Weight {
+    margin-top: 15px;
+    margin-left: 8px;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: #787878;
+}
+
+.add-to-cart {
+    background: none;
+    margin-left: 8px;
+    margin-top: 3px;
+    border: none;
+    cursor: pointer;
 }
