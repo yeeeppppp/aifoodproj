@@ -1,0 +1,55 @@
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #FFF;
+}
+
+img {
+  object-fit: cover;
+}
+
+@font-face {
+  font-family: "Christopher";
+  src: url("/fonts/Christopher.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+body {
+  background-color: #000000;
+  overflow-x: hidden;
+}
+
+:root {
+  --font-family: "Inter", sans-serif;
+  --second-family: "Christopher", sans-serif;
+}
+
+
+:root {
+	--firmennyy-cvet: #ffa600;
+}
+
+:root {
+  /* Базовые размеры */
+  --mobile-card-width: 90vw; /* 90% от ширины экрана */
+  --mobile-card-max-width: 416px; /* Максимум как у вас сейчас */
+  --mobile-gap: 2.5vh; /* Относительные отступы */
+  --mobile-font-base: 16px; /* Базовый размер шрифта */
+}
+
+li {
+  list-style-type: none;
+}
+
+p {
+    background: transparent;
+}
+
