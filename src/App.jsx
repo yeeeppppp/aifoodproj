@@ -4,16 +4,19 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Carousel from './components/Carousel/Carousel';
 import Navigation from './components/Navigation/Navigation';
 import MainPage from './pages/MainPage/MainPage';
+import { CartProvider } from './components/Carousel/CartContext';
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route path='/' element={<MainPage/>}/>
-        </Routes>
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route path='/' element={<MainPage/>}/>
+          </Routes>
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 
