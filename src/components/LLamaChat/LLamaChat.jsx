@@ -28,7 +28,9 @@ function LLamaChat() {
                             content: `Ты помощник для заказа продуктов в магазине. 
                                     Отвечай на русском языке кратко и полезно. 
                                     Помогай выбирать продукты, учитывай аллергии, 
-                                    предлагай рецепты и помогай с составлением корзины.`
+                                    предлагай рецепты и помогай с составлением корзины.
+                                    Пиши без Markdown опций или иных инструментов форматирования
+                                    текста.`
                         },
                         { role: "user", content: userMessage }
                     ],
@@ -113,13 +115,11 @@ function LLamaChat() {
                         <div className="delivery-info"> </div>
                         
                         <div className="cart-footer">
-                            {/* Оставляем пустым или для других элементов */}
                         </div>
                     </>
                 )}
             </div>
 
-            {/* ПЛАВАЮЩАЯ КНОПКА ЗАКАЗА */}
             {!isCartCollapsed && (
                 <div className={`order-button-floating ${isCollapsed ? '' : 'chat-expanded'}`}>
                     <span>Заказать</span>
