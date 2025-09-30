@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Carousel from './components/Carousel/Carousel';
 import Navigation from './components/Navigation/Navigation';
 import MainPage from './pages/MainPage/MainPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
 import { CartProvider } from './components/Carousel/CartContext';
 
 function App() {
@@ -13,6 +16,9 @@ function App() {
         <div>
           <Routes>
             <Route path='/' element={<MainPage/>}/>
+            <Route path='/login' element={<LoginPage/>}/>
+            <Route path='/profile' element={<ProfilePage/>}/>
+            <Route path='/payment' element={<PaymentPage/>}/>
           </Routes>
         </div>
       </Router>
