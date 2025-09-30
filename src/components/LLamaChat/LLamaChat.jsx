@@ -6,6 +6,7 @@ function LLamaChat() {
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
     const messagesEndRef = useRef(null);
 
     const API_KEY = "io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6ImIwYTA4NTJjLTI3MDYtNGQ1Mi1iNmVjLWI2Y2E2MTQ4YjE4NCIsImV4cCI6NDkxMjc4MzY5Mn0.MvmbdN8WgCqLHVUBKdzP2fw3OdI_IOJQNeIKRZzi65KaD_WUEP1xAe7x1R4LMyoDvAlOHNYF_A54vVSZv-cXHA";
@@ -82,38 +83,49 @@ function LLamaChat() {
     const toggleChat = () => {
         setIsCollapsed(!isCollapsed);
     };
+    
+    const toggleCart = () => {
+        setIsCartCollapsed(!isCartCollapsed);
+    };
 
     return (
         <div>
-            <div className="cart-container">
-      <div className="cart-header">
-        <h2>Корзина</h2>
-      </div>
-      
-      <div className="cart-items">
-        <div className="cart-item">
-          <div className="item-controls">
-            <div className="quantity-controls">
-              <button className="quantity-btn"></button>
-              <span className="quantity"></span>
-              <button className="quantity-btn"></button>
+            <div className={`cart-container ${isCartCollapsed ? 'cart-container-collapsed' : ''}`}>
+                <div className="cart-header" onClick={toggleCart}>
+                    <h2>Корзина</h2>
+                </div>
+                
+                {!isCartCollapsed && (
+                    <>
+                        <div className="cart-items">
+                            <div className="cart-item">
+                                <div className="item-controls">
+                                    <div className="quantity-controls">
+                                        <button className="quantity-btn"></button>
+                                        <span className="quantity"></span>
+                                        <button className="quantity-btn"></button>
+                                    </div>
+                                    <div className="item-price"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="delivery-info"> </div>
+                        
+                        <div className="cart-footer">
+                            {/* Оставляем пустым или для других элементов */}
+                        </div>
+                    </>
+                )}
             </div>
-            <div className="item-price"></div>
-          </div>
-        </div>
-      </div>
 
-      <div className="delivery-info"></div>
-      
-      <div className="cart-footer">
-
-      </div>
-    </div>
-
-    <div className={`order-button-floating ${isCollapsed ? '' : 'chat-expanded'}`}>
-      <span>Заказать</span>
-      <span className="end">0₽</span>
-    </div>
+            {/* ПЛАВАЮЩАЯ КНОПКА ЗАКАЗА */}
+            {!isCartCollapsed && (
+                <div className={`order-button-floating ${isCollapsed ? '' : 'chat-expanded'}`}>
+                    <span>Заказать</span>
+                    <span className="end">0₽</span>
+                </div>
+            )}
 
 
     <div className={`chat-container ${isCollapsed ? 'chat-container-collapsed' : ''}`}>

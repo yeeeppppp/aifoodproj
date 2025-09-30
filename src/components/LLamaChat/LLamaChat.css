@@ -239,3 +239,80 @@
     border: none;
     background: none;
 }
+
+.cart-container {
+    margin-right: 60px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background: #42413F;
+    z-index: 950;
+    width: 484px;
+    height: 930px;
+    box-shadow: 20px 0 40px 0 rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-family);
+    border-radius: 26px 26px 0 0;
+    transition: height 0.3s ease;
+    overflow: hidden;
+}
+
+.cart-container-collapsed {
+    height: 130px;
+}
+
+.cart-header {
+    border-radius: 29px 28px 0 0;
+    width: 484px;
+    height: 90px;
+    background: #3b3b3b;
+    cursor: pointer;
+}
+
+.cart-header h2 {
+    font-family: var(--font-family);
+    margin-left: 25px;
+    margin-top: 33px;
+}
+
+.order-button-floating {
+    position: fixed;
+    right: 76px;
+    bottom: 80px;
+    z-index: 1001;
+    transition: bottom 0.3s ease, opacity 0.3s ease;
+    border-radius: 18px;
+    width: 452px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    background: #65ad55;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    justify-content: space-between;
+    padding: 0 20px;
+    opacity: 1;
+}
+
+.order-button-floating.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.order-button-floating.chat-expanded {
+    bottom: 510px;
+}
+
+.order-button-floating span {
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 24px;
+    color: #fff;
+}
+
+.quantity-btn {
+    border: none;
+    background: none;
+}
