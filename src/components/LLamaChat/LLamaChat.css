@@ -232,7 +232,7 @@
 .cart-header h2 {
     font-family: var(--font-family);
     margin-left: 25px;
-    margin-top: 33px;
+    font-weight: 900;
 }
 
 .quantity-btn {
