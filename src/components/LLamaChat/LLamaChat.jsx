@@ -92,6 +92,8 @@ function LLamaChat() {
         setIsCartCollapsed(!isCartCollapsed);
     };
 
+    const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0); 
+
     return (
         <>
             <div className={`chat-container ${isCollapsed ? 'chat-container-collapsed' : ''}`}>
@@ -179,11 +181,10 @@ function LLamaChat() {
                 )}
             </div>
 
-            {/* Кнопка заказа */}
             {!isCollapsed || !isCartCollapsed ? (
                 <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`}>
                     <span>Заказать</span>
-
+                    <span className="end">{totalCost}₽</span>
                 </button>
             ) : null}
         </>
