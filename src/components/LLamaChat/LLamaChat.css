@@ -1,7 +1,6 @@
 .chat-container {
     position: fixed;
     bottom: 0;
-    left: 0;
     right: 0;
     background: #42413F;
     z-index: 1000;
@@ -20,7 +19,6 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
     height: 130px;
     background: #3b3b3b;
