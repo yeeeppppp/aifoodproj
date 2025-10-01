@@ -3,15 +3,70 @@
   font-weight: 900;
   font-size: 36px;
   color: #fff;
-  margin-top: 135px;
-  margin-left: 85px;
+  margin-top: 125px;
+  margin-left: 65px;
 }
 
 .order-list {
+  display: flex;
   border-radius: 28px;
   width: 515px;
   height: 117px;
   background: #42413f;
   margin-left: 105px;
-  margin-top: 45px;
+  margin-top: 10px;
+}
+
+.order-inside {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.order-left {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+.order-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 5px;
+}
+
+.order-number span {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.order-date {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 24px;
+  color: #838383;
+  margin-top: -10px;
+}
+
+.order-cost {
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.delivery-status {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  color: #65ad55;
+  margin-top: -3px;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { CartContext } from '../Carousel/CartContext';
+import { useCart } from '../Carousel/CartContext';
 import "./LLamaChat.css";
 
 function LLamaChat() {
@@ -10,18 +10,18 @@ function LLamaChat() {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
     const messagesEndRef = useRef(null);
-    const { cart, setCart } = useContext(CartContext);
+    const { cart, setCart, addOrder } = useCart();
 
-    const isLaptop = useMediaQuery({ minWidth: 1024, maxWidth: 1440 });
     const isMobile = useMediaQuery({ maxWidth: 768 });
+    const isLaptop = useMediaQuery({ minWidth: 1024, maxWidth: 1440 });
 
     useEffect(() => {
         if (isMobile) {
-            setIsCollapsed(true); // Сворачиваем чат на мобильных
-            setIsCartCollapsed(false); // Корзина открыта
+            setIsCollapsed(true);
+            setIsCartCollapsed(false);
         } else if (isLaptop) {
-            setIsCollapsed(false); // Разворачиваем чат на ноутбуках
-            setIsCartCollapsed(true); // Корзина свернута по умолчанию
+            setIsCollapsed(false);
+            setIsCartCollapsed(true);
         }
     }, [isMobile, isLaptop]);
 
@@ -30,7 +30,6 @@ function LLamaChat() {
 
     const fetchAIResponse = async (userMessage) => {
         try {
-            // Формируем массив сообщений с историей
             const messageHistory = [
                 {
                     role: "system",
@@ -56,8 +55,8 @@ function LLamaChat() {
                 },
                 body: JSON.stringify({
                     model: "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-                    messages: messageHistory, // Передаем всю историю
-                    max_tokens: 1000,
+                    messages: messageHistory,
+                    max_tokens: 500,
                     temperature: 0.7,
                     stream: false,
                     reasoning: false
@@ -114,6 +113,14 @@ function LLamaChat() {
     };
 
     const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // Логи, ибо это хуйня очень долго не хотела работать и я не понимал почему
+    const handleOrder = () => {
+        console.log('Order button clicked, totalCost:', totalCost);
+        addOrder(totalCost);
+        setCart([]);
+        console.log('Cart after order:', cart);
+    };
 
     return (
         <>
@@ -204,10 +211,10 @@ function LLamaChat() {
 
             <div className="order-block">
                 {!isCartCollapsed ? (
-                    <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`}>
+                <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`} onClick={handleOrder}>
                     <span>Заказать</span>
-                    <span className="end">{totalCost}₽</span>
-                    </button>
+                     <span className="end">{totalCost}₽</span>
+                 </button>
             ) : null}
             </div>
         </>
