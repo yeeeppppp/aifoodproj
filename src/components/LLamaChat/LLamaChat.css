@@ -316,3 +316,125 @@
     border: none;
     background: none;
 }
+
+@media (max-width: 480px) {
+    .zagalovok,
+    .cart-header {
+        padding: 10px;
+    }
+
+    .messages-container {
+        font-size: 14px;
+    }
+
+    .chat-input {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-container,
+    .cart-container {
+        width: 100% !important;
+        right: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 0;
+        height: 100vh;
+        max-height: none;
+    }
+
+    .chat-container-collapsed,
+    .cart-container-collapsed {
+        height: 60px !important;
+    }
+
+    .messages-container {
+        max-height: 60vh;
+        padding-bottom: 100px;
+    }
+
+    .input-container {
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .chat-input {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .send-button {
+        padding: 10px 15px;
+        min-width: 50px;
+    }
+
+    .order-button-floating {
+        width: calc(100% - 32px) !important;
+        right: 16px !important;
+        bottom: 16px !important;
+        border-radius: 12px;
+    }
+
+    .order-button-floating.chat-expanded {
+        bottom: calc(100vh - 60px) !important;
+    }
+
+    .cart-item {
+        padding: 8px;
+    }
+
+    .quantity-controls {
+        gap: 5px;
+    }
+
+    .quantity-btn {
+        padding: 8px 12px;
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .chat-container,
+    .cart-container {
+        width: 400px;
+        right: 20px;
+    }
+
+    .messages-container {
+        max-height: 50vh;
+        font-size: 16px;
+    }
+
+    .chat-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .send-button {
+        padding: 8px 12px;
+        min-width: 40px;
+    }
+
+    .order-button-floating {
+        width: 350px;
+        right: 20px;
+        bottom: 80px;
+    }
+
+    .order-button-floating.chat-expanded {
+        bottom: 480px;
+    }
+
+    .cart-item {
+        padding: 8px;
+    }
+
+    .quantity-btn {
+        padding: 6px 10px;
+        font-size: 16px;
+    }
+
+    .end {
+        font-size: 18px;
+    }
+}
