@@ -201,12 +201,12 @@ function LLamaChat() {
                 )}
             </div>
 
-            {!isCollapsed || !isCartCollapsed ? (
+            {!isCartCollapsed ? (
                 <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`}>
-                    <span>Заказать</span>
-                    <span className="end">{totalCost}₽</span>
+                 <span>Заказать</span>
+                 <span className="end">{totalCost}₽</span>
                 </button>
-            ) : null}
+        ) : null}
         </>
     );
 }
