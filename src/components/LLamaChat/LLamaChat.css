@@ -393,6 +393,10 @@
         padding: 8px 12px;
         font-size: 18px;
     }
+
+    .order-block {
+
+    }
 }
 
 @media (min-width: 1024px) and (max-width: 1440px) {
@@ -421,9 +425,11 @@
     }
 
     .order-button-floating {
-        width: 350px;
+        width: 300px;
         right: 20px;
         bottom: 80px;
+        transform: translateX(-28%);
+        margin-bottom: 15px;
     }
 
     .order-button-floating.chat-expanded {
