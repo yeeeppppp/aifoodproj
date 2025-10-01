@@ -30,6 +30,24 @@ function LLamaChat() {
 
     const fetchAIResponse = async (userMessage) => {
         try {
+            // Формируем массив сообщений с историей
+            const messageHistory = [
+                {
+                    role: "system",
+                    content: `Ты помощник для заказа продуктов в магазине.
+                            Отвечай на русском языке кратко и полезно.
+                            Помогай выбирать продукты, учитывай аллергии,
+                            предлагай рецепты и помогай с составлением корзины.
+                            Пиши без Markdown опций или иных инструментов форматирования
+                            текста.`
+                },
+                ...messages.map(msg => ({
+                    role: msg.isUser ? "user" : "assistant",
+                    content: msg.text
+                })),
+                { role: "user", content: userMessage }
+            ];
+
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
@@ -38,19 +56,8 @@ function LLamaChat() {
                 },
                 body: JSON.stringify({
                     model: "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-                    messages: [
-                        {
-                            role: "system",
-                            content: `Ты помощник для заказа продуктов в магазине.
-                                    Отвечай на русском языке кратко и полезно.
-                                    Помогай выбирать продукты, учитывай аллергии,
-                                    предлагай рецепты и помогай с составлением корзины.
-                                    Пиши без Markdown опций или иных инструментов форматирования
-                                    текста.`
-                        },
-                        { role: "user", content: userMessage }
-                    ],
-                    max_tokens: 500,
+                    messages: messageHistory, // Передаем всю историю
+                    max_tokens: 1000,
                     temperature: 0.7,
                     stream: false,
                     reasoning: false
