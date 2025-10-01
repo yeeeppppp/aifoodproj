@@ -190,6 +190,8 @@
     font-family: var(--font-family);
 
     border-radius: 26px 26px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .order-button-floating {
@@ -396,13 +398,16 @@
 @media (min-width: 1024px) and (max-width: 1440px) {
     .chat-container,
     .cart-container {
-        width: 400px;
+        width: 350px;
         right: 20px;
+        max-height: 70vh;
+        bottom: 20px;
     }
 
     .messages-container {
         max-height: 50vh;
         font-size: 16px;
+        padding: 10px;
     }
 
     .chat-input {
@@ -425,8 +430,17 @@
         bottom: 480px;
     }
 
+    .cart-container {
+        width: 350px; /* Уменьшаем ширину */
+        right: 20px; /* Смещаем ближе к краю */
+        max-height: 70vh; /* Уменьшаем максимальную высоту */
+        bottom: 20px; /* Смещаем снизу */
+    }
+
     .cart-item {
         padding: 8px;
+        max-height: 50vh;
+        overflow-y: auto;
     }
 
     .quantity-btn {
