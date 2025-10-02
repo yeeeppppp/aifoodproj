@@ -1,46 +1,51 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import "./CarouselVeg.css";
 import Eggs from "../../assets/Eggs.png";
 import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
-import { CartContext } from '../Carousel/CartContext.jsx';
+import { CartContext } from './CartContext.jsx';
 
 function CarouselVeg() {
     const milkStuffRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const { cart, setCart } = useContext(CartContext);
 
-    const TOTAL = 10;
+    const TOTAL_ORIGINAL = 10;
     const VISIBLE = 5;
-    const CARD_WIDTH = 255 + 16;
+    const CARD_WIDTH = 255 + 16; 
 
-    const handleNext = () => {
-        const newIndex = (currentIndex + 1) % TOTAL;
-        setCurrentIndex(newIndex);
-        if (milkStuffRef.current) {
-            milkStuffRef.current.style.transform = `translateX(-${newIndex * CARD_WIDTH}px)`;
-        }
-    };
-
-    const addToCart = (product) => {
-        setCart(prevCart => {
-            const existingProduct = prevCart.find(item => item.name === product.name);
-            if (existingProduct) {
-                return prevCart.map(item =>
-                    item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
-                );
-            }
-            return [...prevCart, { ...product, quantity: 1 }];
-        });
-    };
-
-    const products = Array.from({ length: TOTAL }, (_, index) => ({
+    const products = Array.from({ length: TOTAL_ORIGINAL }, (_, index) => ({
         name: index % 2 === 0 ? "Яйцо Куриное C0 10шт." : "Молоко 3.2%",
         price: index % 2 === 0 ? 190 : 150,
         oldPrice: index % 2 === 0 ? 290 : 240,
         weight: index % 2 === 0 ? "110 гр." : "0.930л",
         image: index % 2 === 0 ? Eggs : Milk
     }));
+
+    const handleNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % TOTAL_ORIGINAL); 
+    };
+
+    useEffect(() => {
+        if (milkStuffRef.current) {
+            const maxTranslate = (TOTAL_ORIGINAL - VISIBLE) * CARD_WIDTH;
+            const translateValue = -((currentIndex % (TOTAL_ORIGINAL - VISIBLE + 1)) * CARD_WIDTH);
+            milkStuffRef.current.style.transition = 'transform 0.3s ease-in-out';
+            milkStuffRef.current.style.transform = `translateX(${translateValue}px)`;
+        }
+    }, [currentIndex]);
+
+    const addToCart = (product) => {
+        setCart((prevCart) => {
+            const existingProduct = prevCart.find((item) => item.name === product.name);
+            if (existingProduct) {
+                return prevCart.map((item) =>
+                    item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
+                );
+            }
+            return [...prevCart, { ...product, quantity: 1 }];
+        });
+    };
 
     return (
         <div className="carousel-container">
@@ -52,7 +57,7 @@ function CarouselVeg() {
                     {products.map((product, index) => (
                         <div className="product-container" key={index}>
                             <div className="discount">
-                                    <svg width="47" height="18" viewBox="0 0 47 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="47" height="18" viewBox="0 0 47 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 3C0 1.34315 1.34315 0 3 0H44C45.6569 0 47 1.34315 47 3V15C47 16.6569 45.6569 18 44 18H3C1.34315 18 0 16.6569 0 15V3Z" fill="#65AD55" />
                                     <path d="M14.9666 8.83452V9.89276H11.6925V8.83452H14.9666Z" fill="white" />
                                     <path d="M19.2626 5.72727V13H17.9451V7.00923H17.9025L16.2015 8.09588V6.88849L18.0091 5.72727H19.2626Z" fill="white" />
