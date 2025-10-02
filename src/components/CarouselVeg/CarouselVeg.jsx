@@ -3,7 +3,7 @@ import "./CarouselVeg.css";
 import Eggs from "../../assets/Eggs.png";
 import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
-import { CartContext } from './CartContext.jsx';
+import { CartContext } from '../../components/Carousel/CartContext';
 
 function CarouselVeg() {
     const milkStuffRef = useRef(null);

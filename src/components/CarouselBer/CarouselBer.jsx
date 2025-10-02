@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import "./Carousel.css";
+import "./CarouselBer.css";
 import Eggs from "../../assets/Eggs.png";
 import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
-import { CartContext } from './CartContext.jsx';
+import { CartContext } from '../../components/Carousel/CartContext';
 
-function Carousel() {
+function CarouselBer() {
     const milkStuffRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const { cart, setCart } = useContext(CartContext);
@@ -87,4 +87,4 @@ function Carousel() {
     );
 }
 
-export default Carousel;
+export default CarouselBer;
