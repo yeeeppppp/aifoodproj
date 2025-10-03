@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
+import { createClient } from '@supabase/supabase-js'; // Добавляем импорт Supabase
 import "./LLamaChat.css";
+
+// Инициализация Supabase (как в Carousel)
+const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function LLamaChat() {
     const [messages, setMessages] = useState([]);
@@ -9,6 +15,7 @@ function LLamaChat() {
     const [isLoading, setIsLoading] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+    const [products, setProducts] = useState([]); // Добавляем состояние для продуктов
     const messagesEndRef = useRef(null);
     const { cart, setCart, addOrder } = useCart();
 
@@ -25,11 +32,34 @@ function LLamaChat() {
         }
     }, [isMobile, isLaptop]);
 
+    // Загрузка продуктов из Supabase для ИИ
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('pyatorochka_products') // Или другое имя таблицы, если нужно
+                    .select('*');
+                if (error) {
+                    console.error('Ошибка загрузки продуктов для ИИ:', error.message);
+                } else {
+                    console.log('Загружено продуктов для ИИ:', data.length);
+                    setProducts(data);
+                }
+            } catch (error) {
+                console.error('Общая ошибка загрузки для ИИ:', error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
     const API_KEY = "io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6ImIwYTA4NTJjLTI3MDYtNGQ1Mi1iNmVjLWI2Y2E2MTQ4YjE4NCIsImV4cCI6NDkxMjc4MzY5Mn0.MvmbdN8WgCqLHVUBKdzP2fw3OdI_IOJQNeIKRZzi65KaD_WUEP1xAe7x1R4LMyoDvAlOHNYF_A54vVSZv-cXHA";
     const API_URL = "https://api.intelligence.io.solutions/api/v1/chat/completions";
 
     const fetchAIResponse = async (userMessage) => {
         try {
+            // Формируем список продуктов для системного сообщения
+            const productsList = products.map(p => `${p.name} - ${p.price_numeric || p.price}₽`).join(', ');
+
             const messageHistory = [
                 {
                     role: "system",
@@ -37,6 +67,12 @@ function LLamaChat() {
                             Отвечай на русском языке кратко и полезно.
                             Помогай выбирать продукты, учитывай аллергии,
                             предлагай рецепты и помогай с составлением корзины.
+                            Доступные продукты: ${productsList || 'Нет продуктов'}.
+                            Используй ТОЛЬКО продукты из списка. Не придумывай новые товары или компании.
+                            Если продукта нет в списке, скажи, что его нет в наличии и предложи альтернативы из списка.
+                            НЕ пиши список продуктов, если пользователь об этом не просит!!!
+                            Пиши только тип товара и компанию, без ценника, без процентов жирности и прочей информации,
+                            пиши ценник - только если пользователь запрашивает его.
                             Пиши без Markdown опций или иных инструментов форматирования
                             текста.`
                 },
@@ -114,12 +150,9 @@ function LLamaChat() {
 
     const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    // Логи, ибо это хуйня очень долго не хотела работать и я не понимал почему
     const handleOrder = () => {
-        console.log('Order button clicked, totalCost:', totalCost);
-        addOrder(totalCost);
-        setCart([]);
-        console.log('Cart after order:', cart);
+        addOrder(totalCost); // Сохраняем заказ
+        setCart([]); // Очищаем корзину после заказа
     };
 
     return (

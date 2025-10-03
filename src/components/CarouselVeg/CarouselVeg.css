@@ -26,7 +26,8 @@
 .product-container {
     border-radius: 15px;
     width: 255px;
-    height: 366px;
+    height: 426px;
+    min-height: 412px;
     background: #42413f;
     margin-top: 25px;
     position: relative;
@@ -67,7 +68,7 @@
 .carousel-viewport {
     width: calc(5 * (255px + 25px)); 
     overflow: hidden;
-    margin-left: 45px;
+    margin-left: 25px;
     clip-path: inset(0 0 0 50px);
 }
 
@@ -91,7 +92,7 @@
     top: 50%;
     left: -10%;
     width: 40px;
-    height: 1px; /* толщина линии */
+    height: 1px;
     background: #787878;
     transform-origin: center;
 }
@@ -114,8 +115,8 @@ span {
 }
 
 .Weight {
-    margin-top: 15px;
-    margin-left: 8px;
+    position: absolute;
+    bottom: 62px;
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 18px;
@@ -124,8 +125,12 @@ span {
 
 .add-to-cart {
     background: none;
-    margin-left: 8px;
-    margin-top: 3px;
+    position: absolute;
+    bottom: 10px;
+    left: 47%;
+    transform: translateX(-50%);
     border: none;
     cursor: pointer;
+    width: 239px;
+    height: 47px;
 }
