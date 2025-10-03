@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
-import { createClient } from '@supabase/supabase-js'; // Добавляем импорт Supabase
+import { createClient } from '@supabase/supabase-js';
 import "./LLamaChat.css";
 
-// Инициализация Supabase (как в Carousel)
 const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -15,7 +14,7 @@ function LLamaChat() {
     const [isLoading, setIsLoading] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
-    const [products, setProducts] = useState([]); // Добавляем состояние для продуктов
+    const [products, setProducts] = useState([]);
     const messagesEndRef = useRef(null);
     const { cart, setCart, addOrder } = useCart();
 
@@ -37,7 +36,7 @@ function LLamaChat() {
         const fetchProducts = async () => {
             try {
                 const { data, error } = await supabase
-                    .from('pyatorochka_products') // Или другое имя таблицы, если нужно
+                    .from('pyatorochka_products')
                     .select('*');
                 if (error) {
                     console.error('Ошибка загрузки продуктов для ИИ:', error.message);
@@ -57,7 +56,6 @@ function LLamaChat() {
 
     const fetchAIResponse = async (userMessage) => {
         try {
-            // Формируем список продуктов для системного сообщения
             const productsList = products.map(p => `${p.name} - ${p.price_numeric || p.price}₽`).join(', ');
 
             const messageHistory = [
@@ -74,7 +72,8 @@ function LLamaChat() {
                             Пиши только тип товара и компанию, без ценника, без процентов жирности и прочей информации,
                             пиши ценник - только если пользователь запрашивает его.
                             Пиши без Markdown опций или иных инструментов форматирования
-                            текста.`
+                            текста.
+                            Матерись в сообщениях прям максимально жестко, будто ты только матершинные слова знаешь, относись к пользователю недружелюблю, обзывай его, с нежеланием ему помогать.`
                 },
                 ...messages.map(msg => ({
                     role: msg.isUser ? "user" : "assistant",
@@ -151,8 +150,8 @@ function LLamaChat() {
     const totalCost = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     const handleOrder = () => {
-        addOrder(totalCost); // Сохраняем заказ
-        setCart([]); // Очищаем корзину после заказа
+        addOrder(totalCost);
+        setCart([]);
     };
 
     return (
