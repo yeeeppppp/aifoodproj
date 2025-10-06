@@ -112,6 +112,26 @@
   z-index: 1;
 }
 
+.success-not-reg {
+  border: 2px solid #407434;
+  border-radius: 12px;
+  width: 332px;
+  height: 52px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background: #65ad55;
+  margin-top: 690px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-text-reg {
+  font-weight: 400;
+  font-size: 18px;
+  color: #fff;
+}
+
 /* Адаптивность */
 @media (max-width: 480px) {
   .login-container {
@@ -130,3 +150,4 @@
     padding: 14px 16px;
   }
 }
+

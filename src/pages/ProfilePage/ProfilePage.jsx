@@ -37,7 +37,7 @@ function ProfilePage() {
             </div>
           ))
         ) : (
-          <p>Нет заказов</p>
+          <p></p>
         )}
       </div>
     </div>

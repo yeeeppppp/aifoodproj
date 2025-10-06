@@ -14,6 +14,7 @@
     "@splinetool/react-spline": "^4.1.0",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/supabase-js": "^2.52.0",
+    "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "gsap": "^3.13.0",
     "punycode": "^2.3.1",

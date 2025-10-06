@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import supabase from './supabaseClient';
 import './LoginPage.css';
+import bcrypt from 'bcryptjs';
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -12,17 +14,87 @@ function LoginPage() {
     name: '',
     password: ''
   });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login data:', loginData);
-    // Здесь будет логика входа
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage('');
+      setSuccessMessage('');
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [errorMessage, successMessage]);
+
+  const hashPassword = async (password) => {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('Register data:', registerData);
-    // Здесь будет логика регистрации
+    try {
+      console.log('Попытка входа с email:', loginData.email);
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, email, password, name')
+        .eq('email', loginData.email)
+        .single();
+      console.log('Ответ от Supabase:', { data, error });
+      if (error || !data) {
+        setErrorMessage('Пользователь не найден');
+      } else {
+        const isMatch = await bcrypt.compare(loginData.password, data.password);
+        if (isMatch) {
+          console.log('Успешный вход:', data);
+          localStorage.setItem('userId', data.id);
+          window.location.href = '/menu';
+        } else {
+          setErrorMessage('Неверный пароль');
+        }
+      }
+    } catch (error) {
+      console.error('Общая ошибка:', error);
+      setErrorMessage('Общая ошибка: ' + error.message);
+    }
+  };
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registerData.email)) {
+      setErrorMessage('Введите корректный email');
+      return;
+    }
+    if (registerData.password.length < 6) {
+      setErrorMessage('Пароль должен быть не короче 6 символов');
+      return;
+    }
+    if (!registerData.name.trim()) {
+      setErrorMessage('Введите ваше имя');
+      return;
+    }
+
+    try {
+      const hashedPassword = await hashPassword(registerData.password);
+      const { data, error } = await supabase.from('users').insert({
+        email: registerData.email,
+        password: hashedPassword,
+        name: registerData.name,
+        created_at: new Date().toISOString(),
+        is_active: true,
+      });
+      if (error) {
+        console.error('Ошибка регистрации:', error);
+        setErrorMessage('Ошибка регистрации: ' + error.message);
+      } else {
+        console.log('Успешная регистрация:', data);
+        setSuccessMessage(' ');
+        setRegisterData({ email: '', name: '', password: '' });
+      }
+    } catch (error) {
+      console.error('Общая ошибка:', error);
+      setErrorMessage('Общая ошибка: ' + error.message);
+    }
   };
 
   const handleLoginChange = (e) => {
@@ -39,13 +111,15 @@ function LoginPage() {
     });
   };
 
-  return (
+return (
     <>
       <Helmet>
         <title>FOODAI</title>
       </Helmet>
       <div className="login-page">
         <div className="login-container">
+          {errorMessage && <p className="error">{errorMessage}</p>}
+          {successMessage && <p className="success">{successMessage}</p>}
           <div className="logo">
             <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0.346292H19.9613V4.84809H6.95058V7.14846H19.6892V11.675H6.95058V18.7492H0V0.346292Z" fill="white" />
@@ -59,7 +133,6 @@ function LoginPage() {
             </svg>
           </div>
           
-          {/* Форма входа */}
           <form className="login-form" onSubmit={handleLoginSubmit}>
             <input
               type="email"
@@ -84,12 +157,10 @@ function LoginPage() {
             </button>
           </form>
 
-          {/* Разделитель */}
           <div className="divider">
             <span className="divider-text">Или</span>
           </div>
 
-          {/* Форма регистрации */}
           <form className="register-form" onSubmit={handleRegisterSubmit}>
             <input
               type="email"
@@ -123,6 +194,11 @@ function LoginPage() {
             </button>
           </form>
         </div>
+        {successMessage && (
+            <div className="success-not-reg">
+              <p className="success-text-reg">Вы зарегистрировались!</p>
+            </div>
+          )}
       </div>
     </>
   );
