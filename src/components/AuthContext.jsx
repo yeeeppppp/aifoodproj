@@ -1,13 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import supabase from '../pages/LoginPage/supabaseClient'; // Твой клиент Supabase
-import bcrypt from 'bcryptjs'; // Импорт вместо require
+import supabase from '../pages/LoginPage/supabaseClient';
+import bcrypt from 'bcryptjs';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [userId, setUserId] = useState(null);
 
-  // Проверка текущего пользователя при загрузке
   useEffect(() => {
     const checkCurrentUser = async () => {
       if (userId) {
@@ -16,7 +15,7 @@ export function AuthProvider({ children }) {
           .select('id, is_active')
           .eq('id', userId)
           .eq('is_active', true)
-          .single(); // Указываем, что ожидаем один объект
+          .single();
 
         if (error) {
           console.log('Нет активного пользователя:', error.message);
@@ -30,7 +29,6 @@ export function AuthProvider({ children }) {
     checkCurrentUser();
   }, [userId]);
 
-  // Функция логина
   const login = async (email, password) => {
     try {
       const { data, error } = await supabase
@@ -67,7 +65,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Функция выхода
   const logout = () => {
     setUserId(null);
     console.log('Выход выполнен');

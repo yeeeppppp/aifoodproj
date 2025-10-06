@@ -31,7 +31,6 @@ function LLamaChat() {
         }
     }, [isMobile, isLaptop]);
 
-    // Загрузка продуктов из Supabase для ИИ
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -42,7 +41,7 @@ function LLamaChat() {
                     console.error('Ошибка загрузки продуктов для ИИ:', error.message);
                 } else {
                     console.log('Загружено продуктов для ИИ:', data.length);
-                    console.log('Структура продуктов:', data[0]);  // Отладка структуры
+                    console.log('Структура продуктов:', data[0]);
                     setProducts(data);
                 }
             } catch (error) {
@@ -199,8 +198,8 @@ function LLamaChat() {
 
     const handleOrder = () => {
         if (cart.length > 0) {
-            addOrder(totalCost);  // Фиксируем заказ
-            setCart([]);          // Сбрасываем корзину
+            addOrder(totalCost);
+            setCart([]);
             console.log('Заказ оформлен, корзина сброшена');
         } else {
             console.log('Корзина пуста, заказ не оформлен');
