@@ -1,12 +1,71 @@
-import "./Navigation.css"
+import React, { useState, useEffect } from 'react';
+import './Navigation.css';
+import { createClient } from '@supabase/supabase-js';
 
-export default function Navigation(){
-    return(
-        <>
-        {/* НАВИГАЦИЯ */}
-            <div className="navigation-container">
-                <div className="left-side-navigation">
-                    <a href="/">
+const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export default function Navigation() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false); // Состояние для уведомлений
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('pyatorochka_products')
+                    .select('*');
+                if (error) {
+                    console.error('Ошибка загрузки продуктов:', error.message);
+                } else {
+                    setProducts(data);
+                }
+            } catch (error) {
+                console.error('Общая ошибка загрузки:', error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        if (searchTerm.trim() === '') {
+            setSearchResults([]);
+            setIsDropdownVisible(false);
+        } else {
+            const filtered = products.filter(product =>
+                product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setSearchResults(filtered.slice(0, 5));
+            setIsDropdownVisible(true);
+        }
+    }, [searchTerm, products]);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleResultClick = (product) => {
+        setSearchTerm(product.name);
+        setIsDropdownVisible(false);
+        console.log('Выбран продукт:', product.name);
+    };
+
+    const handleBellClick = () => {
+        setIsNotificationVisible(!isNotificationVisible); // Переключаем видимость
+    };
+
+// ... (предыдущий код остается тем же до return)
+
+return (
+    <>
+        <div className="navigation-container">
+            <div className="left-side-navigation">
+                <a href="/">
+                    <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0.346292H19.9613V4.84809H6.95058V7.14846H19.6892V11.675H6.95058V18.7492H0V0.346292Z" fill="white" />
                             <path d="M34.8184 0H35.9315C37.564 0 39.0481 0.115431 40.3838 0.346292C41.736 0.560663 42.8656 0.84924 43.7725 1.21202C44.696 1.55831 45.4957 1.9953 46.1718 2.52298C46.8644 3.03418 47.4086 3.55362 47.8043 4.0813C48.2001 4.60898 48.5134 5.18614 48.7443 5.81276C48.9916 6.43938 49.1483 7.00829 49.2142 7.51948C49.2967 8.03068 49.3379 8.56661 49.3379 9.12727V9.86932C49.3379 10.43 49.2967 10.9659 49.2142 11.4771C49.1483 11.9883 48.9916 12.5655 48.7443 13.2086C48.5134 13.8352 48.2001 14.4206 47.8043 14.9648C47.4251 15.4924 46.8891 16.0201 46.1966 16.5478C45.504 17.0755 44.7042 17.5207 43.7972 17.8835C42.8903 18.2463 41.7607 18.5349 40.4085 18.7492C39.0728 18.9801 37.5805 19.0955 35.9315 19.0955H34.8184C33.1694 19.0955 31.6688 18.9801 30.3166 18.7492C28.9809 18.5349 27.8513 18.2463 26.9279 17.8835C26.0209 17.5207 25.2212 17.0755 24.5286 16.5478C23.836 16.0201 23.2918 15.4924 22.896 14.9648C22.5168 14.4206 22.2035 13.8352 21.9561 13.2086C21.7253 12.5655 21.5686 11.9883 21.4861 11.4771C21.4202 10.9659 21.3872 10.43 21.3872 9.86932V9.12727C21.3872 8.56661 21.4202 8.03068 21.4861 7.51948C21.5686 7.00829 21.7253 6.43938 21.9561 5.81276C22.2035 5.18614 22.5168 4.60898 22.896 4.0813C23.2918 3.55362 23.836 3.03418 24.5286 2.52298C25.2212 1.9953 26.0209 1.55831 26.9279 1.21202C27.8513 0.84924 28.9809 0.560663 30.3166 0.346292C31.6688 0.115431 33.1694 0 34.8184 0ZM42.0658 9.64671V9.30042C42.0658 8.75624 41.9669 8.25329 41.769 7.79157C41.5711 7.31336 41.233 6.85164 40.7548 6.4064C40.2931 5.96117 39.6005 5.60663 38.6771 5.34279C37.7536 5.07895 36.6488 4.94703 35.3626 4.94703C34.0434 4.94703 32.922 5.07895 31.9986 5.34279C31.0751 5.60663 30.3826 5.96117 29.9208 6.4064C29.4591 6.85164 29.1293 7.31336 28.9314 7.79157C28.75 8.25329 28.6593 8.75624 28.6593 9.30042V9.59724C28.6593 10.1414 28.7583 10.6608 28.9562 11.1556C29.154 11.6338 29.4838 12.112 29.9456 12.5902C30.4073 13.0519 31.0999 13.4229 32.0233 13.7033C32.9633 13.9836 34.0763 14.1238 35.3626 14.1238C36.6488 14.1238 37.7536 13.9918 38.6771 13.728C39.617 13.4477 40.3178 13.0766 40.7796 12.6149C41.2413 12.1532 41.5711 11.6832 41.769 11.205C41.9669 10.7103 42.0658 10.1909 42.0658 9.64671Z" fill="white" />
@@ -17,24 +76,51 @@ export default function Navigation(){
                             <path d="M36.8127 13.2492C36.8127 12.4208 37.4843 11.7492 38.3127 11.7492H39.3127C40.1411 11.7492 40.8127 12.4208 40.8127 13.2492C40.8127 14.0777 40.1411 14.7492 39.3127 14.7492H38.3127C37.4843 14.7492 36.8127 14.0777 36.8127 13.2492Z" fill="white" />
                             <path d="M65.8127 13.2492C65.8127 12.4208 66.4843 11.7492 67.3127 11.7492H68.3127C69.1411 11.7492 69.8127 12.4208 69.8127 13.2492C69.8127 14.0777 69.1411 14.7492 68.3127 14.7492H67.3127C66.4843 14.7492 65.8127 14.0777 65.8127 13.2492Z" fill="white" />
                         </svg>
-                    </a>
-                    <input type="text" placeholder="Найти в FOODAI"/>
+                    </svg>
+                </a>
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Найти в FOODAI"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        onFocus={() => setIsDropdownVisible(true)}
+                        onBlur={() => setTimeout(() => setIsDropdownVisible(false), 200)}
+                    />
+                    {isDropdownVisible && searchResults.length > 0 && (
+                        <div className="search-dropdown">
+                            {searchResults.map((product, index) => (
+                                <div
+                                    key={index}
+                                    className="search-result"
+                                    onClick={() => handleResultClick(product)}
+                                >
+                                    {product.name} - {product.price_numeric || product.price}₽
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
-                <div className="right-side-navigation">
-                    <input type="text" placeholder="Адрес"/>
-                    <button className="bell">
-                        <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M23.5 22.1944V23.5H0V22.1944L2.61111 19.5833V11.75C2.61111 7.70278 5.26139 4.13861 9.13889 2.98972V2.61111C9.13889 1.9186 9.41399 1.25445 9.90367 0.764777C10.3933 0.275098 11.0575 0 11.75 0C12.4425 0 13.1067 0.275098 13.5963 0.764777C14.086 1.25445 14.3611 1.9186 14.3611 2.61111V2.98972C18.2386 4.13861 20.8889 7.70278 20.8889 11.75V19.5833L23.5 22.1944ZM14.3611 24.8056C14.3611 25.4981 14.086 26.1622 13.5963 26.6519C13.1067 27.1416 12.4425 27.4167 11.75 27.4167C11.0575 27.4167 10.3933 27.1416 9.90367 26.6519C9.41399 26.1622 9.13889 25.4981 9.13889 24.8056" fill="white" />
-                        </svg>
+            </div>
+            <div className="right-side-navigation">
+                <input type="text" placeholder="Адрес"/>
+                <button className="bell" onClick={handleBellClick}>
+                    <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.5 22.1944V23.5H0V22.1944L2.61111 19.5833V11.75C2.61111 7.70278 5.26139 4.13861 9.13889 2.98972V2.61111C9.13889 1.9186 9.41399 1.25445 9.90367 0.764777C10.3933 0.275098 11.0575 0 11.75 0C12.4425 0 13.1067 0.275098 13.5963 0.764777C14.086 1.25445 14.3611 1.9186 14.3611 2.61111V2.98972C18.2386 4.13861 20.8889 7.70278 20.8889 11.75V19.5833L23.5 22.1944ZM14.3611 24.8056C14.3611 25.4981 14.086 26.1622 13.5963 26.6519C13.1067 27.1416 12.4425 27.4167 11.75 27.4167C11.0575 27.4167 10.3933 27.1416 9.90367 26.6519C9.41399 26.1622 9.13889 25.4981 9.13889 24.8056" fill="white"/>
+                    </svg>
+                </button>
+                <a href="/profile">
+                    <button className="profile-button">
+                        <img src="https://images2.imgbox.com/31/70/qyh5fZ87_o.png" alt="profile-IMG" />
                     </button>
-                    <a href="/profile">
-                        <button className="profile-button">
-                            <img src="https://images2.imgbox.com/31/70/qyh5fZ87_o.png" alt="profile-IMG" />
-                        </button>
-                    </a>
-                </div>
-
-            </div>   
-        </>
-    )
+                </a>
+            </div>
+        </div>
+        {isNotificationVisible && (
+            <div className="notification-panel">
+                <p>Уведомление: Новые предложения доступны!</p>
+            </div>
+        )}
+    </>
+);
 }
