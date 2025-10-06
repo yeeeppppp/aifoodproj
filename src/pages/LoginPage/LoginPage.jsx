@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet';
 import supabase from './supabaseClient';
 import './LoginPage.css';
 import bcrypt from 'bcryptjs';
+import { useAuth } from '../../components/AuthContext'; // Новый импорт
+import { useNavigate, useLocation } from 'react-router-dom'; // Новый импорт
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -16,6 +18,10 @@ function LoginPage() {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const { login } = useAuth(); // Используем из контекста
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -31,32 +37,23 @@ function LoginPage() {
   };
 
   const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log('Попытка входа с email:', loginData.email);
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, email, password, name')
-        .eq('email', loginData.email)
-        .single();
-      console.log('Ответ от Supabase:', { data, error });
-      if (error || !data) {
-        setErrorMessage('Пользователь не найден');
-      } else {
-        const isMatch = await bcrypt.compare(loginData.password, data.password);
-        if (isMatch) {
-          console.log('Успешный вход:', data);
-          localStorage.setItem('userId', data.id);
-          window.location.href = '/menu';
-        } else {
-          setErrorMessage('Неверный пароль');
-        }
-      }
-    } catch (error) {
-      console.error('Общая ошибка:', error);
-      setErrorMessage('Общая ошибка: ' + error.message);
+  e.preventDefault();
+  try {
+    console.log('Попытка входа с email:', loginData.email);
+    const success = await login(loginData.email, loginData.password);
+    console.log('Ответ от AuthContext:', success);
+    if (success) {
+      console.log('Успешный вход');
+      const { from } = location.state || { from: { pathname: '/menu' } };
+      navigate(from.pathname);
+    } else {
+      setErrorMessage('Неверный пароль или пользователь неактивен');
     }
-  };
+  } catch (error) {
+    console.error('Общая ошибка:', error);
+    setErrorMessage('Общая ошибка: ' + error.message);
+  }
+};
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();

@@ -1,28 +1,40 @@
-// App.jsx
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Carousel from './components/Carousel/Carousel';
-import Navigation from './components/Navigation/Navigation';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import { CartProvider } from './components/Carousel/CartContext';
+import { AuthProvider } from './components/AuthContext'; // Убедись, что путь верный
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <div>
-          <Routes>
-            <Route path='/' element={<LoginPage/>}/>
-            <Route path='/menu' element={<MainPage/>}/>
-            <Route path='/profile' element={<ProfilePage/>}/>
-            <Route path='/payment' element={<PaymentPage/>}/>
-          </Routes>
-        </div>
-      </Router>
-    </CartProvider>
+    <AuthProvider> {/* AuthProvider должен быть на верхнем уровне */}
+      <CartProvider>
+        <Router>
+          <div>
+            <Routes>
+              <Route path='/' element={<LoginPage/>}/>
+              <Route path='/menu' element={
+                <ProtectedRoute>
+                  <MainPage/>
+                </ProtectedRoute>
+              }/>
+              <Route path='/profile' element={
+                <ProtectedRoute>
+                  <ProfilePage/>
+                </ProtectedRoute>
+              }/>
+              <Route path='/payment' element={
+                <ProtectedRoute>
+                  <PaymentPage/>
+                </ProtectedRoute>
+              }/>
+            </Routes>
+          </div>
+        </Router>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
