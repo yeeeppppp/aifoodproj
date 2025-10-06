@@ -3,6 +3,7 @@
   background-color: #191918;
   padding: 24px 16px;
   font-family: var(--font-family);
+  margin-left: -110px;
 }
 
 .payment-two-col {
