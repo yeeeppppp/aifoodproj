@@ -11,7 +11,7 @@ export default function Navigation() {
     const [searchResults, setSearchResults] = useState([]);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [products, setProducts] = useState([]);
-    const [isNotificationVisible, setIsNotificationVisible] = useState(false); // Состояние для уведомлений
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -55,10 +55,8 @@ export default function Navigation() {
     };
 
     const handleBellClick = () => {
-        setIsNotificationVisible(!isNotificationVisible); // Переключаем видимость
+        setIsNotificationVisible(!isNotificationVisible);
     };
-
-// ... (предыдущий код остается тем же до return)
 
 return (
     <>
