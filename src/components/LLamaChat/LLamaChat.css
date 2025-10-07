@@ -195,7 +195,7 @@
 }
 
 .order-button-floating {
-    position: fixed;
+    position: relative;
     right: 76px;
     bottom: 80px;
     z-index: 1001;
