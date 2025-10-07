@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
+import Eggs from'../../assets/eggs.png';
 import "./LLamaChat.css";
 
 const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
@@ -271,19 +272,32 @@ function LLamaChat() {
                             {cart.length > 0 ? (
                                 cart.map((item, index) => (
                                     <div key={index} className="cart-item">
-                                        <div className="item-controls">
-                                            <div className="quantity-controls">
-                                                <button className="quantity-btn" onClick={() => { /* Логика минус */ }}>-</button>
-                                                <span className="quantity">{item.quantity}</span>
-                                                <button className="quantity-btn" onClick={() => { /* Логика плюс */ }}>+</button>
-                                            </div>
+                                        <div className="cart-img">
+                                            <img src={Eggs} alt="" />
+                                        </div>
+                                        <div className="item-info">
+                                            <p className="item-name">{item.name || item.product_name || item.title} - {item.weight}</p>
                                             <div className="item-price">{(item.price_numeric || item.price || 0) * item.quantity}₽</div>
                                         </div>
-                                        <p>{item.name || item.product_name || item.title} - {item.weight}</p>
+                                        <div className="item-controls">
+                                            <div className="quantity-controls">
+                                                <button className="quantity-btn" onClick={() => { /* Логика минус */ }}>
+                                                    <svg width="9" height="2" viewBox="0 0 9 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0.695801 1.03182V0L8.37982 1.22134e-06V1.03182L0.695801 1.03182ZM0.695801 1.03182V0L8.37982 1.22134e-06V1.03182L0.695801 1.03182Z" fill="#ADADAD" />
+                                                    </svg>
+                                                </button>
+                                                <span className="quantity">{item.quantity}</span>
+                                                <button className="quantity-btn" onClick={() => { /* Логика плюс */ }}>
+                                                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M3.97045 7.68402V0H5.00752V7.68402H3.97045ZM0.646973 4.35792V3.3261H8.33099V4.35792H0.646973Z" fill="#ADADAD" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
-                                <p>Корзина пуста</p>
+                                <p></p>
                             )}
                         </div>
                         <div className="delivery-info"> </div>
