@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useCart } from '../../components/Carousel/CartContext';
 import './ProfilePage.css';
+import Eggs from '../../assets/eggs.png'
 
 function ProfilePage() {
   const { orders, addOrder } = useCart() || {};
@@ -18,7 +19,7 @@ function ProfilePage() {
   }
 
   return (
-    <div key={forceRender}>
+    <div className="orders-container" key={forceRender}>
       <div className="my-orders">
         <h1>Мои заказы</h1>
         {orders.length > 0 ? (
@@ -39,6 +40,27 @@ function ProfilePage() {
         ) : (
           <p></p>
         )}
+      </div>
+      <div className="order-bio">
+        <div className="order-number-2"><span>Заказ</span></div>
+        <div className="order-status"><span>Доставлен</span></div>
+        <div className="border-line"></div>
+        <div className="details-str"><span>Детали заказа</span></div>
+
+        <div className="order-items">
+          <div className="order-item">
+            <div className="order-img">
+              <img src={Eggs} alt="" />
+            </div>
+            <div className="order-info">
+              <p className="order-name">Название</p>
+              <div className="order-price">Цена</div>
+            </div>
+            <div className="quantity">
+              <span>1</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
