@@ -6,29 +6,29 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [userId, setUserId] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false); // Флаг инициализации
 
+  // Восстановление userId из localStorage при загрузке
   useEffect(() => {
-    const checkCurrentUser = async () => {
-      if (userId) {
-        const { data, error } = await supabase
-          .from('users')
-          .select('id, is_active')
-          .eq('id', userId)
-          .eq('is_active', true)
-          .single();
+    const savedUserId = localStorage.getItem('userId');
+    if (savedUserId) {
+      setUserId(savedUserId);
+      console.log('Восстановлен userId из localStorage:', savedUserId);
+    }
+    setIsInitialized(true); // Устанавливаем, что инициализация завершена
+  }, []);
 
-        if (error) {
-          console.log('Нет активного пользователя:', error.message);
-          setUserId(null);
-        } else if (data) {
-          setUserId(data.id);
-          console.log('Текущий пользователь:', data.id);
-        }
-      }
-    };
-    checkCurrentUser();
+  // Сохранение userId в localStorage при изменении
+  useEffect(() => {
+    if (userId) {
+      localStorage.setItem('userId', userId);
+      console.log('Сохранён userId в localStorage:', userId);
+    } else {
+      localStorage.removeItem('userId');
+    }
   }, [userId]);
 
+  // Функция логина
   const login = async (email, password) => {
     try {
       const { data, error } = await supabase
@@ -65,13 +65,14 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Функция выхода
   const logout = () => {
     setUserId(null);
     console.log('Выход выполнен');
   };
 
   return (
-    <AuthContext.Provider value={{ userId, login, logout }}>
+    <AuthContext.Provider value={{ userId, login, logout, isInitialized }}>
       {children}
     </AuthContext.Provider>
   );

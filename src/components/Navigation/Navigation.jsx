@@ -62,7 +62,7 @@ return (
     <>
         <div className="navigation-container">
             <div className="left-side-navigation">
-                <a href="/">
+                <a href="/menu">
                     <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0.346292H19.9613V4.84809H6.95058V7.14846H19.6892V11.675H6.95058V18.7492H0V0.346292Z" fill="white" />

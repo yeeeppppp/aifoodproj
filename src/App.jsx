@@ -6,6 +6,7 @@ import PaymentPage from './pages/PaymentPage/PaymentPage';
 import { CartProvider } from './components/Carousel/CartContext';
 import { AuthProvider } from './components/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navigation from './components/Navigation/Navigation';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               }/>
               <Route path='/profile' element={
                 <ProtectedRoute>
+                  <Navigation/>
                   <ProfilePage/>
                 </ProtectedRoute>
               }/>

@@ -98,6 +98,9 @@
 .order-items {
   margin-top: 25px;
   margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .order-info p {
@@ -127,7 +130,8 @@
 }
 
 .order-price {
-  margin-top: 25px;
+  position: absolute;
+  bottom: 10px;
 
   font-family: var(--font-family);
   font-weight: 800;
@@ -135,27 +139,27 @@
   color: #65ad55;
 }
 
-.quantity {
+.quantity-2 {
   border-radius: 3px;
   width: 102px;
   height: 30px;
 
   position: absolute;
-  left: 86%;
-  bottom: 36%;
 
   border-radius: 5px;
   width: 102px;
   height: 30px;
 
   display: flex;
+  margin-left: 540px;
+  margin-top: 25px;
 
   background: #353535;
   justify-content: center;
   align-items: center;
 }
 
-.quantity span {
+.quantity-2 span {
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 12px;

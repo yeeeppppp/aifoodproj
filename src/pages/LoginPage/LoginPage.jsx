@@ -53,7 +53,7 @@ function LoginPage() {
     console.error('Общая ошибка:', error);
     setErrorMessage('Общая ошибка: ' + error.message);
   }
-};
+  };
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();

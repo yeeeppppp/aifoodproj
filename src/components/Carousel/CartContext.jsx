@@ -6,18 +6,15 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  // Я понял почему эта хуйня не работала, короче local storage
+  // Загрузка из localStorage
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     const savedOrders = localStorage.getItem('orders');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    }
+    if (savedCart) setCart(JSON.parse(savedCart));
+    if (savedOrders) setOrders(JSON.parse(savedOrders));
   }, []);
 
+  // Сохранение в localStorage
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
@@ -50,11 +47,28 @@ export function CartProvider({ children }) {
     );
   };
 
-  const addOrder = (totalCost) => {
+  // Новая функция для создания заказа с деталями
+  const addOrderWithItems = () => {
+    if (cart.length === 0) return;
+
     const orderNumber = orders.length + 1;
     const orderDate = new Date().toLocaleDateString('ru-RU');
-    const newOrder = { number: orderNumber, date: orderDate, cost: totalCost };
+    const totalCost = cart.reduce((sum, item) => sum + (item.price_numeric || item.price || 0) * item.quantity, 0);
+    const items = cart.map(item => ({
+      name: item.name || item.product_name || item.title,
+      price: item.price_numeric || item.price || 0,
+      quantity: item.quantity,
+    }));
+
+    const newOrder = {
+      number: orderNumber,
+      date: orderDate,
+      cost: totalCost,
+      items: items, // Сохраняем детали товаров
+    };
+
     setOrders((prevOrders) => [...prevOrders, newOrder]);
+    setCart([]); // Очищаем корзину после заказа
   };
 
   const value = {
@@ -64,7 +78,7 @@ export function CartProvider({ children }) {
     removeFromCart,
     updateQuantity,
     orders,
-    addOrder,
+    addOrder: addOrderWithItems, // Заменяем addOrder на новую функцию
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

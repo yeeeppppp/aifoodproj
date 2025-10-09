@@ -198,13 +198,12 @@ function LLamaChat() {
     const totalCost = cart.reduce((total, item) => total + ((item.price_numeric || item.price || 0) * item.quantity), 0);
 
     const handleOrder = () => {
-        if (cart.length > 0) {
-            addOrder(totalCost);
-            setCart([]);
-            console.log('Заказ оформлен, корзина сброшена');
-        } else {
-            console.log('Корзина пуста, заказ не оформлен');
-        }
+    if (cart.length === 0) {
+        console.log('Корзина пуста');
+        return;
+    }
+    addOrder(); // Вызываем новую функцию addOrderWithItems
+    console.log('Заказ оформлен, корзина очищена');
     };
 
     return (
