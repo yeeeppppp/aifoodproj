@@ -82,7 +82,7 @@
 
 .orders-container {
   display: flex;
-  gap: 120px;
+  gap: clamp(30px, 30vw, 700px);
 }
 
 .order-img img{
@@ -125,8 +125,7 @@
 
   word-wrap: break-word;
   word-break: break-word;
-  hyphens: auto;
-  max-width: 200px;
+  max-width: 800px;
 }
 
 .order-price {
