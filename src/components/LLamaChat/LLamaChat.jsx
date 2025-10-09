@@ -202,7 +202,7 @@ function LLamaChat() {
         console.log('Корзина пуста');
         return;
     }
-    addOrder(); // Вызываем новую функцию addOrderWithItems
+    addOrder();
     console.log('Заказ оформлен, корзина очищена');
     };
 

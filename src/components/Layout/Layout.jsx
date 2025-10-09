@@ -1,6 +1,6 @@
 import React from 'react';
-import Navigation from '../Navigation/Navigation';
-import './Layout.css'; // Новый файл для стилей (опционально)
+import Navigation from './Navigation';
+import './Layout.css';
 
 function Layout({ children }) {
   return (

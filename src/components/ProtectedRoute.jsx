@@ -7,9 +7,8 @@ function ProtectedRoute({ children }) {
 
   console.log('ProtectedRoute: userId:', userId, 'isInitialized:', isInitialized, 'Current path:', location.pathname);
 
-  // Ждём инициализации, чтобы избежать раннего редиректа
   if (!isInitialized) {
-    return null; // Или загрузочный спиннер, если хочешь
+    return null;
   }
 
   if (!userId) {

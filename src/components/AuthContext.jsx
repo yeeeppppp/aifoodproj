@@ -6,19 +6,17 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [userId, setUserId] = useState(null);
-  const [isInitialized, setIsInitialized] = useState(false); // Флаг инициализации
+  const [isInitialized, setIsInitialized] = useState(false); 
 
-  // Восстановление userId из localStorage при загрузке
   useEffect(() => {
     const savedUserId = localStorage.getItem('userId');
     if (savedUserId) {
       setUserId(savedUserId);
       console.log('Восстановлен userId из localStorage:', savedUserId);
     }
-    setIsInitialized(true); // Устанавливаем, что инициализация завершена
+    setIsInitialized(true);
   }, []);
 
-  // Сохранение userId в localStorage при изменении
   useEffect(() => {
     if (userId) {
       localStorage.setItem('userId', userId);
@@ -28,7 +26,6 @@ export function AuthProvider({ children }) {
     }
   }, [userId]);
 
-  // Функция логина
   const login = async (email, password) => {
     try {
       const { data, error } = await supabase
@@ -65,7 +62,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Функция выхода
   const logout = () => {
     setUserId(null);
     console.log('Выход выполнен');

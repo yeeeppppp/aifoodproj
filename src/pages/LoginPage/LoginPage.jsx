@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet';
 import supabase from './supabaseClient';
 import './LoginPage.css';
 import bcrypt from 'bcryptjs';
-import { useAuth } from '../../components/AuthContext'; // Новый импорт
-import { useNavigate, useLocation } from 'react-router-dom'; // Новый импорт
+import { useAuth } from '../../components/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -19,7 +19,7 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const { login } = useAuth(); // Используем из контекста
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
