@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
+  margin-top: 150px;
 }
 
 /* не используется в новой раскладке, оставлено на случай переиспользования */
@@ -288,7 +289,12 @@
 
 .order-button,
 .order-button span {
-  color: #ffffff !important;
+  color: #ffffff;
+
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 24px;
+  color: #fff;
 }
 
 .order-button {
@@ -308,7 +314,8 @@
 }
 
 .order-amount {
-  background-color: #4fa85a;
+
+
   color: #ffffff;
   padding: 8px 18px;
   border-radius: 18px;

@@ -4,6 +4,8 @@ import { useCart } from '../Carousel/CartContext';
 import { createClient } from '@supabase/supabase-js'
 import Eggs from'../../assets/eggs.png';
 import "./LLamaChat.css";
+import Payment from "../../pages/PaymentPage/PaymentPage";
+import { a } from 'react-spring';
 
 const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
@@ -308,10 +310,12 @@ function LLamaChat() {
 
             <div className="order-block">
                 {!isCartCollapsed ? (
+                    <a href="/payment">
                     <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`} onClick={handleOrder}>
                         <span>Заказать</span>
                         <span className="end">{totalCost}₽</span>
                     </button>
+                    </a>
                 ) : null}
             </div>
         </>

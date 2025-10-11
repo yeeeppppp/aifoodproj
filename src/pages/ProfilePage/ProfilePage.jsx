@@ -63,8 +63,8 @@ function ProfilePage() {
                   <img src={Eggs} alt="" />
                 </div>
                 <div className="order-info">
-                  <p className="order-name">{item.name}</p>
-                  <div className="order-price">{item.price * item.quantity}₽</div>
+                  <p className="order-name-2">{item.name}</p>
+                  <div className="order-price-2">{item.price * item.quantity}₽</div>
                 </div>
                 <div className="quantity-2">
                   <span>{item.quantity}</span>

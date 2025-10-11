@@ -117,18 +117,18 @@
   margin-left: 10px;
 }
 
-.order-name {
+.order-name-2 {
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 18px;
   color: #fff;
-
-  word-wrap: break-word;
-  word-break: break-word;
-  max-width: 800px;
+  overflow-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+  max-width: 100%;
 }
 
-.order-price {
+.order-price-2 {
   position: absolute;
   bottom: 10px;
 
