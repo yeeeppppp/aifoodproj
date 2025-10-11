@@ -199,13 +199,14 @@ function LLamaChat() {
 
     const totalCost = cart.reduce((total, item) => total + ((item.price_numeric || item.price || 0) * item.quantity), 0);
 
-    const handleOrder = () => {
-    if (cart.length === 0) {
-        console.log('Корзина пуста');
-        return;
-    }
-    addOrder();
-    console.log('Заказ оформлен, корзина очищена');
+    const handleOrder = async () => {
+        if (cart.length === 0) {
+            console.log('Корзина пуста');
+            return;
+        }
+        await addOrder();
+        console.log('Вызов addOrder завершён');
+        setCart([]);
     };
 
     return (
@@ -310,12 +311,16 @@ function LLamaChat() {
 
             <div className="order-block">
                 {!isCartCollapsed ? (
-                    <a href="/payment">
-                    <button className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`} onClick={handleOrder}>
-                        <span>Заказать</span>
-                        <span className="end">{totalCost}₽</span>
-                    </button>
-                    </a>
+                        <button
+                            className={`order-button-floating ${!isCollapsed && !isCartCollapsed ? 'chat-expanded' : ''}`}
+                            onClick={async () => {
+                                await handleOrder();
+                                setCart([]);
+                            }}
+                        >
+                            <span>Заказать</span>
+                            <span className="end">{totalCost}₽</span>
+                        </button>
                 ) : null}
             </div>
         </>

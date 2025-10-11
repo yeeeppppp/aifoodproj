@@ -1,74 +1,184 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import supabase from '../../supabaseClient';
+import { useAuth } from '../AuthContext';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const { userId } = useAuth();
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  // Загрузка из localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const savedOrders = localStorage.getItem('orders');
-    if (savedCart) setCart(JSON.parse(savedCart));
-    if (savedOrders) setOrders(JSON.parse(savedOrders));
-  }, []);
-
-  // Сохранение в localStorage
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  useEffect(() => {
-    localStorage.setItem('orders', JSON.stringify(orders));
-  }, [orders]);
-
-  const addToCart = (item) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((i) => i.name === item.name);
-      if (existingItem) {
-        return prevCart.map((i) =>
-          i.name === item.name ? { ...i, quantity: i.quantity + 1 } : i
-        );
+    const fetchCart = async () => {
+      if (!userId) {
+        console.log('UserId не доступен, корзина не загружается');
+        return;
       }
-      return [...prevCart, { ...item, quantity: 1 }];
-    });
+      try {
+        const { data, error } = await supabase
+          .from('carts')
+          .select('*')
+          .eq('users_id', userId);
+        if (error) {
+          console.error('Ошибка загрузки корзины:', error.message, error.details);
+        } else {
+          const mappedCart = data.map(item => ({
+            name: item.item_name,
+            price: item.item_price,
+            quantity: item.quantity,
+          }));
+          setCart(mappedCart);
+          console.log('Загружена корзина для userId', userId, ':', mappedCart);
+        }
+      } catch (err) {
+        console.error('Общая ошибка:', err);
+      }
+    };
+    fetchCart();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!userId) return;
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('users_id', userId)
+          .order('created_at', { ascending: false });
+        if (error) {
+          console.error('Ошибка загрузки заказов:', error.message, error.details);
+        } else {
+          setOrders(data || []);
+          console.log('Загружено заказов для userId', userId, ':', data.length, data);
+        }
+      } catch (err) {
+        console.error('Общая ошибка:', err);
+      }
+    };
+    fetchOrders();
+  }, [userId]);
+
+  const addToCart = async (item) => {
+    if (!userId) {
+      console.error('UserId not available');
+      return;
+    }
+    console.log('Попытка добавить в корзину:', item);
+    try {
+      const { data, error } = await supabase
+        .from('carts')
+        .upsert({
+          users_id: userId,
+          item_name: item.name,
+          item_price: parseFloat(item.price_numeric || item.price.replace(/\D/g, '') || 0),
+          quantity: item.quantity || 1,
+        }, { onConflict: ['users_id', 'item_name'] });
+      if (error) {
+        console.error('Ошибка добавления в корзину:', error.message, error.details);
+      } else {
+        setCart(prevCart => {
+          const existingItem = prevCart.find(i => i.name === item.name);
+          if (existingItem) {
+            return prevCart.map(i =>
+              i.name === item.name ? { ...i, quantity: i.quantity + 1 } : i
+            );
+          }
+          return [...prevCart, { ...item, quantity: 1 }];
+        });
+        console.log('Товар добавлен в корзину:', item.name);
+      }
+    } catch (err) {
+      console.error('Общая ошибка:', err);
+    }
   };
 
-  const removeFromCart = (itemName) => {
-    setCart((prevCart) => prevCart.filter((item) => item.name !== itemName));
+  const removeFromCart = async (itemName) => {
+    if (!userId) return;
+    try {
+      const { error } = await supabase
+        .from('carts')
+        .delete()
+        .eq('users_id', userId)
+        .eq('item_name', itemName);
+      if (error) {
+        console.error('Ошибка удаления из корзины:', error.message, error.details);
+      } else {
+        setCart(prevCart => prevCart.filter(item => item.name !== itemName));
+        console.log('Товар удалён из корзины:', itemName);
+      }
+    } catch (err) {
+      console.error('Общая ошибка:', err);
+    }
   };
 
-  const updateQuantity = (itemName, quantity) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.name === itemName ? { ...item, quantity: Math.max(0, quantity) } : item
-      )
-    );
+  const updateQuantity = async (itemName, quantity) => {
+    if (!userId) return;
+    try {
+      const { error } = await supabase
+        .from('carts')
+        .update({ quantity: Math.max(0, quantity) })
+        .eq('users_id', userId)
+        .eq('item_name', itemName);
+      if (error) {
+        console.error('Ошибка обновления количества:', error.message, error.details);
+      } else {
+        setCart(prevCart =>
+          prevCart.map(item =>
+            item.name === itemName ? { ...item, quantity: Math.max(0, quantity) } : item
+          )
+        );
+        console.log('Обновлено количество для:', itemName, 'на', quantity);
+      }
+    } catch (err) {
+      console.error('Общая ошибка:', err);
+    }
   };
 
-  // Новая функция для создания заказа с деталями
-  const addOrderWithItems = () => {
-    if (cart.length === 0) return;
-
-    const orderNumber = orders.length + 1;
-    const orderDate = new Date().toLocaleDateString('ru-RU');
-    const totalCost = cart.reduce((sum, item) => sum + (item.price_numeric || item.price || 0) * item.quantity, 0);
+  const addOrder = async () => {
+    if (cart.length === 0 || !userId) {
+      console.log('Корзина пуста или userId отсутствует, заказ не создан');
+      return;
+    }
+    console.log('Попытка создать заказ, текущая корзина:', cart);
+    const totalCost = cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/\D/g, '') || 0) * item.quantity), 0);
+    if (isNaN(totalCost) || totalCost === 0) {
+      console.error('Ошибка вычисления totalCost:', totalCost, 'cart:', cart);
+      return;
+    }
     const items = cart.map(item => ({
-      name: item.name || item.product_name || item.title,
-      price: item.price_numeric || item.price || 0,
+      name: item.name,
+      price: parseFloat(item.price.replace(/\D/g, '') || 0),
       quantity: item.quantity,
     }));
-
-    const newOrder = {
-      number: orderNumber,
-      date: orderDate,
-      cost: totalCost,
-      items: items, // Сохраняем детали товаров
-    };
-
-    setOrders((prevOrders) => [...prevOrders, newOrder]);
-    setCart([]); // Очищаем корзину после заказа
+    console.log('Вычисленный totalCost:', totalCost, 'items:', items);
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .insert({
+          users_id: userId,
+          order_number: orders.length + 1,
+          order_date: new Date().toLocaleDateString('ru-RU'),
+          total_cost: totalCost,
+          items: items,
+          created_at: new Date(),
+        }, { returning: 'minimal' });
+      if (error) {
+        console.error('Ошибка создания заказа:', error.message, error.details);
+      } else {
+        await fetchOrders();
+        const { error: clearError } = await supabase
+          .from('carts')
+          .delete()
+          .eq('users_id', userId);
+        if (clearError) console.error('Ошибка очистки корзины:', clearError.message, clearError.details);
+        setCart([]);
+        console.log('Заказ успешно создан и корзина очищена');
+      }
+    } catch (err) {
+      console.error('Общая ошибка при создании заказа:', err);
+    }
   };
 
   const value = {
@@ -78,7 +188,7 @@ export function CartProvider({ children }) {
     removeFromCart,
     updateQuantity,
     orders,
-    addOrder: addOrderWithItems, // Заменяем addOrder на новую функцию
+    addOrder,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

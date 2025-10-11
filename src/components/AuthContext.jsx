@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import supabase from '../pages/LoginPage/supabaseClient';
+import supabase from '../supabaseClient';
 import bcrypt from 'bcryptjs';
 
 const AuthContext = createContext();

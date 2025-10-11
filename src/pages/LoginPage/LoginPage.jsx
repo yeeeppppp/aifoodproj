@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import supabase from './supabaseClient';
+import supabase from '../../supabaseClient';
 import './LoginPage.css';
 import bcrypt from 'bcryptjs';
 import { useAuth } from '../../components/AuthContext';
