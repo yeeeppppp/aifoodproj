@@ -115,7 +115,6 @@ return (
       </Helmet>
       <div className="login-page">
         <div className="login-container">
-          {errorMessage && <p className="error">{errorMessage}</p>}
           {successMessage && <p className="success">{successMessage}</p>}
           <div className="logo">
             <svg width="141" height="20" viewBox="0 0 141 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,6 +193,11 @@ return (
         {successMessage && (
             <div className="success-not-reg">
               <p className="success-text-reg">Вы зарегистрировались!</p>
+            </div>
+          )}
+          {errorMessage && (
+            <div className="error-not-log">
+              <p className="error-text-log">Ошибка авторизации :(</p>
             </div>
           )}
       </div>

@@ -5,6 +5,7 @@ import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
 import { CartContext } from '../../components/Carousel/CartContext';
 import { createClient } from '@supabase/supabase-js';
+import spinner from '../../assets/Spinner3.gif';
 
 const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
@@ -105,7 +106,7 @@ function CarouselVeg() {
                             </div>
                         ))
                     ) : (
-                        <p>Загрузка продуктов...</p>
+                            <img src= {spinner} alt="" />
                     )}
                 </div>
             </div>
