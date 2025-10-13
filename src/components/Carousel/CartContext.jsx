@@ -67,27 +67,35 @@ export function CartProvider({ children }) {
     }
     console.log('Попытка добавить в корзину:', item);
     try {
+      const itemPrice = item.price_numeric || parseFloat(item.price.replace(/\D/g, '')) || 0;
+      const itemQuantity = item.quantity || 1;
+
       const { data, error } = await supabase
         .from('carts')
         .upsert({
           users_id: userId,
           item_name: item.name,
-          item_price: parseFloat(item.price_numeric || item.price.replace(/\D/g, '') || 0),
-          quantity: item.quantity || 1,
-        }, { onConflict: ['users_id', 'item_name'] });
+          item_price: itemPrice,
+          quantity: itemQuantity,
+        }, {
+          onConflict: ['users_id', 'item_name'],
+          ignoreDuplicates: false // Обновлять quantity, если конфликт
+        });
+
       if (error) {
         console.error('Ошибка добавления в корзину:', error.message, error.details);
       } else {
+        console.log('Upsert результат:', data);
         setCart(prevCart => {
           const existingItem = prevCart.find(i => i.name === item.name);
           if (existingItem) {
             return prevCart.map(i =>
-              i.name === item.name ? { ...i, quantity: i.quantity + 1 } : i
+              i.name === item.name ? { ...i, quantity: i.quantity + itemQuantity } : i
             );
           }
-          return [...prevCart, { ...item, quantity: 1 }];
+          return [...prevCart, { ...item, price: itemPrice, quantity: itemQuantity }];
         });
-        console.log('Товар добавлен в корзину:', item.name);
+        console.log('Товар добавлен/обновлён в корзине:', item.name, 'цена:', itemPrice, 'количество:', itemQuantity);
       }
     } catch (err) {
       console.error('Общая ошибка:', err);
@@ -142,14 +150,14 @@ export function CartProvider({ children }) {
       return;
     }
     console.log('Попытка создать заказ, текущая корзина:', cart);
-    const totalCost = cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/\D/g, '') || 0) * item.quantity), 0);
+    const totalCost = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
     if (isNaN(totalCost) || totalCost === 0) {
       console.error('Ошибка вычисления totalCost:', totalCost, 'cart:', cart);
       return;
     }
     const items = cart.map(item => ({
       name: item.name,
-      price: parseFloat(item.price.replace(/\D/g, '') || 0),
+      price: parseFloat(item.price),
       quantity: item.quantity,
     }));
     console.log('Вычисленный totalCost:', totalCost, 'items:', items);
