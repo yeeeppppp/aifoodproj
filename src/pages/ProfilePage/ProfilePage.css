@@ -109,6 +109,9 @@
   hyphens: auto;
   max-width: 200px;
   margin-top: 5px;
+  max-height: 3.4em; /* Ограничиваем высоту до 3 строк */
+  overflow: hidden;
+  line-height: 1.2em;
 }
 
 .order-info {

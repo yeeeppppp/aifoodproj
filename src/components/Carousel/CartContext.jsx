@@ -27,6 +27,8 @@ export function CartProvider({ children }) {
             name: item.item_name,
             price: item.item_price,
             quantity: item.quantity,
+            image: item.item_image,
+            image_url: item.item_image_url,
           }));
           setCart(mappedCart);
           console.log('Загружена корзина для userId', userId, ':', mappedCart);
@@ -77,6 +79,8 @@ export function CartProvider({ children }) {
           item_name: item.name,
           item_price: itemPrice,
           quantity: itemQuantity,
+          item_image: item.image,
+          item_image_url: item.image_url,
         }, {
           onConflict: ['users_id', 'item_name'],
           ignoreDuplicates: false // Обновлять quantity, если конфликт
@@ -159,6 +163,8 @@ export function CartProvider({ children }) {
       name: item.name,
       price: parseFloat(item.price),
       quantity: item.quantity,
+      image: item.image,
+      image_url: item.image_url,
     }));
     console.log('Вычисленный totalCost:', totalCost, 'items:', items);
     try {

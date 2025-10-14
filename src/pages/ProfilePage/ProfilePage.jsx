@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../components/Carousel/CartContext';
 import './ProfilePage.css';
-import Eggs from '../../assets/eggs.png';
 import supabase from '../../supabaseClient';
 import { useAuth } from '../../components/AuthContext';
 
@@ -11,6 +10,13 @@ function ProfilePage() {
   const [orders, setOrders] = useState(contextOrders || []);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Функция для обрезки длинного текста
+  const truncateText = (text, maxLength = 80) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
 
   useEffect(() => {
     console.log('ProfilePage: Проверка userId:', userId, 'contextOrders:', contextOrders);
@@ -92,10 +98,10 @@ function ProfilePage() {
             {selectedOrder.items.map((item, index) => (
               <div key={index} className="order-item">
                 <div className="order-img">
-                  <img src={Eggs} alt="" />
+                  <img src={item.image || item.image_url} alt="" />
                 </div>
                 <div className="order-info">
-                  <p className="order-name-2">{item.name}</p>
+                  <p className="order-name-2">{truncateText(item.name)}</p>
                   <div className="order-price-2">{item.price * item.quantity}₽</div>
                 </div>
                 <div className="quantity-2">

@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
 import { createClient } from '@supabase/supabase-js'
-import Eggs from'../../assets/eggs.png';
 import "./LLamaChat.css";
 import Payment from "../../pages/PaymentPage/PaymentPage";
 import { a } from 'react-spring';
@@ -18,8 +17,31 @@ function LLamaChat() {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
     const [products, setProducts] = useState([]);
+
+    // Функция для обрезки длинного текста
+    const truncateText = (text, maxLength = 80) => {
+        if (!text) return '';
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    };
+
+    // Функция для уменьшения количества товара
+    const handleDecreaseQuantity = (item) => {
+        const newQuantity = item.quantity - 1;
+        if (newQuantity <= 0) {
+            removeFromCart(item.name);
+        } else {
+            updateQuantity(item.name, newQuantity);
+        }
+    };
+
+    // Функция для увеличения количества товара
+    const handleIncreaseQuantity = (item) => {
+        const newQuantity = item.quantity + 1;
+        updateQuantity(item.name, newQuantity);
+    };
     const messagesEndRef = useRef(null);
-    const { cart, setCart, addOrder, addToCart } = useCart();
+    const { cart, setCart, addOrder, addToCart, updateQuantity, removeFromCart } = useCart();
 
     const isMobile = useMediaQuery({ maxWidth: 768 });
     const isLaptop = useMediaQuery({ minWidth: 1024, maxWidth: 1440 });
@@ -275,21 +297,21 @@ function LLamaChat() {
                                 cart.map((item, index) => (
                                     <div key={index} className="cart-item">
                                         <div className="cart-img">
-                                            <img src={Eggs} alt="" />
+                                            <img src={item.image || item.image_url} alt="" />
                                         </div>
                                         <div className="item-info">
-                                            <p className="item-name">{item.name || item.product_name || item.title} - {item.weight}</p>
+                                            <p className="item-name">{truncateText(item.name || item.product_name || item.title)} - {item.weight}</p>
                                             <div className="item-price">{(item.price_numeric || item.price || 0) * item.quantity}₽</div>
                                         </div>
                                         <div className="item-controls">
                                             <div className="quantity-controls">
-                                                <button className="quantity-btn" onClick={() => { /* Логика минус */ }}>
+                                                <button className="quantity-btn" onClick={() => handleDecreaseQuantity(item)}>
                                                     <svg width="9" height="2" viewBox="0 0 9 2" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M0.695801 1.03182V0L8.37982 1.22134e-06V1.03182L0.695801 1.03182ZM0.695801 1.03182V0L8.37982 1.22134e-06V1.03182L0.695801 1.03182Z" fill="#ADADAD" />
                                                     </svg>
                                                 </button>
                                                 <span className="quantity">{item.quantity}</span>
-                                                <button className="quantity-btn" onClick={() => { /* Логика плюс */ }}>
+                                                <button className="quantity-btn" onClick={() => handleIncreaseQuantity(item)}>
                                                     <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M3.97045 7.68402V0H5.00752V7.68402H3.97045ZM0.646973 4.35792V3.3261H8.33099V4.35792H0.646973Z" fill="#ADADAD" />
                                                     </svg>
