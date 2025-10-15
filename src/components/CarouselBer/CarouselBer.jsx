@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import "./CarouselBer.css";
-import Eggs from "../../assets/Eggs.png";
-import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
 import { CartContext } from '../../components/Carousel/CartContext';
 import { createClient } from '@supabase/supabase-js';
@@ -25,16 +23,16 @@ function CarouselBer() {
         const fetchProducts = async () => {
             try {
                 const { data, error } = await supabase
-                    .from('pyatorochka_products')
+                    .from('new_magnit_meat')
                     .select('*');
 
                 if (error) {
                     console.error('Ошибка загрузки продуктов:', error.message, error.details);
                 } else {
                     console.log('Загружено продуктов:', data.length, 'Данные:', data);
-                    const productsWithImages = data.map((product, index) => ({
+                    const productsWithImages = data.map((product) => ({
                         ...product,
-                        image: index % 2 === 0 ? Eggs : Milk,
+                        image: product.image_url,
                         size: product.size || 'N/A',
                         oldPrice: 0
                     }));
@@ -77,7 +75,7 @@ function CarouselBer() {
     return (
         <div className="carousel-container">
             <div className="nameOfRow">
-                <h1>Молочная продукция, яйца</h1>
+                <h1>Мясная продукция</h1>
             </div>
             <div className="carousel-viewport">
                 <div className="milk-stuff" ref={milkStuffRef}>
@@ -93,7 +91,7 @@ function CarouselBer() {
                                         <path d="M31.6676 11.6364V11.2528C31.6676 10.9711 31.7268 10.7119 31.8452 10.4751C31.9659 10.2384 32.1411 10.0478 32.3707 9.90341C32.6004 9.759 32.8786 9.68679 33.2053 9.68679C33.5414 9.68679 33.8232 9.759 34.0504 9.90341C34.2777 10.0455 34.4493 10.2348 34.5653 10.4716C34.6837 10.7083 34.7429 10.9688 34.7429 11.2528V11.6364C34.7429 11.9181 34.6837 12.1773 34.5653 12.4141C34.447 12.6508 34.273 12.8414 34.0433 12.9858C33.8161 13.1302 33.5367 13.2024 33.2053 13.2024C32.8738 13.2024 32.5933 13.1302 32.3636 12.9858C32.134 12.8414 31.96 12.6508 31.8416 12.4141C31.7256 12.1773 31.6676 11.9181 31.6676 11.6364ZM32.5945 11.2528V11.6364C32.5945 11.8234 32.6394 11.995 32.7294 12.1513C32.8194 12.3075 32.978 12.3857 33.2053 12.3857C33.4349 12.3857 33.5923 12.3087 33.6776 12.1548C33.7652 11.9986 33.8089 11.8258 33.8089 11.6364V11.2528C33.8089 11.0634 33.7675 10.8906 33.6847 10.7344C33.6018 10.5758 33.442 10.4964 33.2053 10.4964C32.9827 10.4964 32.8253 10.5758 32.733 10.7344C32.6406 10.8906 32.5945 11.0634 32.5945 11.2528ZM27.9709 7.47443V7.09091C27.9709 6.80682 28.0312 6.5464 28.152 6.30966C28.2727 6.07292 28.4479 5.88352 28.6776 5.74148C28.9072 5.59706 29.1854 5.52486 29.5121 5.52486C29.8459 5.52486 30.1264 5.59706 30.3537 5.74148C30.5833 5.88352 30.7562 6.07292 30.8722 6.30966C30.9882 6.5464 31.0462 6.80682 31.0462 7.09091V7.47443C31.0462 7.75852 30.987 8.01894 30.8686 8.25568C30.7526 8.49006 30.5798 8.67827 30.3501 8.82031C30.1205 8.96236 29.8411 9.03338 29.5121 9.03338C29.1783 9.03338 28.8965 8.96236 28.6669 8.82031C28.4396 8.67827 28.2668 8.48887 28.1484 8.25213C28.0301 8.01539 27.9709 7.75616 27.9709 7.47443ZM28.9048 7.09091V7.47443C28.9048 7.66383 28.9486 7.83665 29.0362 7.9929C29.1262 8.14678 29.2848 8.22372 29.5121 8.22372C29.7393 8.22372 29.8956 8.14678 29.9808 7.9929C30.0684 7.83665 30.1122 7.66383 30.1122 7.47443V7.09091C30.1122 6.90152 30.0708 6.72869 29.9879 6.57244C29.9051 6.41383 29.7464 6.33452 29.5121 6.33452C29.2872 6.33452 29.1297 6.41383 29.0398 6.57244C28.9498 6.73106 28.9048 6.90388 28.9048 7.09091ZM28.3757 13L33.3757 5.72727H34.2635L29.2635 13H28.3757Z" fill="white" />
                                     </svg>
                                 </div>
-                                <img src={product.image} alt="" className="egg" />
+                                <img src={product.image} alt={product.name} className="product_image" />
                                 <p className="price">{product.price_numeric || product.price}₽<span className="oldPrice">{product.oldPrice || 'N/A'}₽</span></p>
                                 <p className="Name">{product.name}</p>
                                 <p className="Weight">{product.size}</p>
