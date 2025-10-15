@@ -1,18 +1,17 @@
 .payment-page {
   min-height: 100vh;
-  background-color: #191918;
-  padding: 24px 16px;
+  background-color: var(--color-bg);
+  padding: var(--page-padding-x);
   font-family: var(--font-family);
-  margin-left: -110px;
 }
 
 .payment-two-col {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
-  margin-top: 150px;
+  margin-top: calc(var(--nav-height) + 40px);
 }
 
 /* не используется в новой раскладке, оставлено на случай переиспользования */
@@ -44,20 +43,20 @@
 }
 
 .card {
-  background-color: #2b2b2a;
-  border-radius: 24px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-24);
   padding: 26px;
   border: 1px solid #2f2f2f;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  box-shadow: var(--shadow-elev-3);
 }
 
 .address-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #0f0f0f;
+  background-color: var(--color-surface-3);
   border: 1px solid #1a1a1a;
-  border-radius: 20px;
+  border-radius: var(--radius-20);
   padding: 0 14px;
   min-height: 52px;
 }
@@ -68,7 +67,7 @@
   display: grid;
   place-items: center;
 }
-.address-icon svg { fill: #dcdcdc; }
+.address-icon svg { fill: var(--color-text-muted); }
 
 .address-input:focus {
   outline: none;
@@ -76,7 +75,7 @@
 }
 
 .address-input::placeholder {
-  color: #cfcfcf;
+  color: var(--color-text-muted);
   font-size: 14px;
   text-indent: 0;
 }
@@ -85,7 +84,7 @@
   flex: 1;
   background-color: transparent;
   border: none;
-  color: #fff;
+  color: var(--color-text);
   font-size: 14px;
   padding: 0;
 }
@@ -98,10 +97,10 @@
 }
 
 .pill-input {
-  background-color: #0f0f0f;
+  background-color: var(--color-surface-3);
   border: 1px solid #1a1a1a;
-  color: #fff;
-  border-radius: 20px;
+  color: var(--color-text);
+  border-radius: var(--radius-20);
   padding: 0 14px;
   font-size: 14px;
   min-height: 52px;
@@ -109,10 +108,10 @@
 
 .comment-textarea {
   margin-top: 12px;
-  background-color: #0f0f0f;
+  background-color: var(--color-surface-3);
   border: 1px solid #1a1a1a;
-  color: #fff;
-  border-radius: 18px;
+  color: var(--color-text);
+  border-radius: var(--radius-18);
   padding: 14px 18px;
   resize: vertical;
   width: 100%;
@@ -140,7 +139,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background-color: #1a1a1a;
+  background-color: var(--color-surface);
   border: 1px solid #3a3a3a;
   border-radius: 8px;
   cursor: pointer;
@@ -149,14 +148,14 @@
 
 .payment-method:hover,
 .delivery-method:hover {
-  border-color: #ffa600;
+  border-color: var(--color-brand);
 }
 
 .payment-method input[type="radio"],
 .delivery-method input[type="radio"] {
   width: 20px;
   height: 20px;
-  accent-color: #ffa600;
+  accent-color: var(--color-brand);
 }
 
 .method-label {
@@ -173,7 +172,7 @@
 }
 
 .method-price {
-  color: #ffa600;
+  color: var(--color-brand);
   font-weight: 600;
 }
 
@@ -204,14 +203,13 @@
 }
 
 .wide-input {
-  background-color: #0f0f0f;
+  background-color: var(--color-surface-3);
   border: 1px solid #1a1a1a;
-  border-radius: 20px;
+  border-radius: var(--radius-20);
   padding: 0 14px;
-  color: #ffffff;
+  color: var(--color-text);
   font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+  transition: border-color 0.2s ease;
   min-height: 52px;
 }
 
@@ -220,7 +218,7 @@
 .pill-input:focus,
 .address-row:focus-within {
   outline: none;
-  border-color: #ffa600;
+  border-color: var(--color-brand);
 }
 
 .form-input::placeholder {
@@ -289,23 +287,15 @@
 
 .order-button,
 .order-button span {
-  color: #ffffff;
-
+  color: var(--color-text);
   font-family: var(--font-family);
   font-weight: 700;
   font-size: 24px;
-  color: #fff;
 }
 
 .order-button {
   margin-top: 20px;
-  background-color: #63be6b;
-  border: none;
-  border-radius: 20px;
-  padding: 0 22px;
-  font-size: 17px;
-  font-weight: 800;
-  cursor: pointer;
+  border-radius: var(--radius-20);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -314,11 +304,9 @@
 }
 
 .order-amount {
-
-
-  color: #ffffff;
+  color: var(--color-text);
   padding: 8px 18px;
-  border-radius: 18px;
+  border-radius: var(--radius-18);
   font-weight: 900;
 }
 

@@ -1,0 +1,7 @@
+.ui-empty { text-align: center; padding: 24px; background: var(--color-surface); border-radius: var(--radius-18); }
+.ui-empty__icon { margin-bottom: 8px; }
+.ui-empty__title { color: var(--color-text); font-family: var(--font-family); font-weight: var(--font-weight-bold); }
+.ui-empty__desc { color: var(--color-text-muted); font-family: var(--font-family); margin-top: 6px; }
+.ui-empty__action { margin-top: 12px; }
+
+

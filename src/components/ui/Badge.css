@@ -1,0 +1,13 @@
+.ui-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: var(--radius-12);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+.ui-badge--brand { background: var(--color-brand); color: #000; }
+.ui-badge--accent { background: var(--color-accent); color: var(--color-text); }
+.ui-badge--muted { background: var(--color-muted); color: var(--color-text); }
+
+

@@ -1,3 +1,6 @@
+@import url("./styles/tokens.css");
+@import url("./styles/util.css");
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
@@ -22,27 +25,11 @@ img {
 }
 
 body {
-  background-color: #191918;
+  background-color: var(--color-bg);
   overflow-x: hidden;
 }
 
-:root {
-  --font-family: "Inter", sans-serif;
-  --second-family: "Christopher", sans-serif;
-}
-
-
-:root {
-	--firmennyy-cvet: #ffa600;
-}
-
-:root {
-  /* Базовые размеры */
-  --mobile-card-width: 90vw; /* 90% от ширины экрана */
-  --mobile-card-max-width: 416px; /* Максимум как у вас сейчас */
-  --mobile-gap: 2.5vh; /* Относительные отступы */
-  --mobile-font-base: 16px; /* Базовый размер шрифта */
-}
+/* mobile sizing variables stay if needed; consider moving to tokens later */
 
 li {
   list-style-type: none;

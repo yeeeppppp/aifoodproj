@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import { useCart } from '../../components/Carousel/CartContext';
 import './PaymentPage.css';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 
 function PaymentPage() {
   const navigate = useNavigate();
@@ -71,7 +73,7 @@ function PaymentPage() {
                   <path d="M12 3.172l8 6.4V20a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4H10v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.572l8-6.4zm0-2.172a1 1 0 0 0-.62.214l-9 7.2A1 1 0 0 0 2 9.2V20a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3v-3h2v3a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9.2a1 1 0 0 0-.38-.786l-9-7.2A1 1 0 0 0 12 1z"/>
                 </svg>
               </div>
-              <input
+              <Input
                 type="text"
                 className="address-input"
                 placeholder="г. Чебоксары, Ленина 31"
@@ -80,28 +82,28 @@ function PaymentPage() {
               />
             </div>
             <div className="pill-grid">
-              <input
+              <Input
                 type="text"
                 className="pill-input"
                 placeholder="Кв/офис"
                 value={deliveryData.apartment}
                 onChange={(e) => handleDeliveryChange('apartment', e.target.value)}
               />
-              <input
+              <Input
                 type="text"
                 className="pill-input"
                 placeholder="Домофон"
                 value={deliveryData.intercom}
                 onChange={(e) => handleDeliveryChange('intercom', e.target.value)}
               />
-              <input
+              <Input
                 type="text"
                 className="pill-input"
                 placeholder="Подъезд"
                 value={deliveryData.entrance}
                 onChange={(e) => handleDeliveryChange('entrance', e.target.value)}
               />
-              <input
+              <Input
                 type="text"
                 className="pill-input"
                 placeholder="Этаж"
@@ -120,7 +122,7 @@ function PaymentPage() {
 
           <form className="card card-right" onSubmit={handleSubmit}>
             <h2 className="section-title">Оплата</h2>
-            <input
+            <Input
               type="text"
               className="wide-input card-number"
               placeholder="Номер карты"
@@ -130,7 +132,7 @@ function PaymentPage() {
               required
             />
             <div className="two-inputs">
-              <input
+              <Input
                 type="text"
                 className="wide-input"
                 placeholder="DD/MM"
@@ -139,7 +141,7 @@ function PaymentPage() {
                 onChange={(e) => handlePaymentChange('expiryDate', formatExpiryDate(e.target.value))}
                 required
               />
-              <input
+              <Input
                 type="text"
                 className="wide-input"
                 placeholder="CVC/CVV"
@@ -149,10 +151,10 @@ function PaymentPage() {
                 required
               />
             </div>
-            <button type="submit" className="order-button">
+            <Button type="submit" variant="primary" size="lg" className="order-button">
               <span>Заказать</span>
               <span className="order-amount">{finalTotal}₽</span>
-            </button>
+            </Button>
           </form>
         </div>
       </div>

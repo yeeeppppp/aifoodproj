@@ -1,0 +1,313 @@
+/* ===== ChatDemo - Демонстрационный компонент ===== */
+
+.chat-demo {
+  position: relative;
+  z-index: 1;
+}
+
+.chat-demo__controls {
+  max-width: 800px;
+  margin: var(--space-20) auto;
+  padding: var(--space-24);
+}
+
+.chat-demo h2 {
+  color: var(--color-text);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-12);
+  text-align: center;
+}
+
+.chat-demo p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  text-align: center;
+  margin-bottom: var(--space-24);
+}
+
+/* ===== Режимы демонстрации ===== */
+.demo-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-24);
+}
+
+.demo-mode-btn {
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-12);
+  padding: var(--space-16);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+}
+
+.demo-mode-btn:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elev-2);
+}
+
+.demo-mode-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.demo-mode-btn__label {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+.demo-mode-btn__description {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+/* ===== Действия демо ===== */
+.demo-actions {
+  text-align: center;
+  margin-bottom: var(--space-24);
+}
+
+/* ===== Особенности ===== */
+.demo-features {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-12);
+  padding: var(--space-20);
+}
+
+.demo-features h3 {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-12);
+}
+
+.demo-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.demo-features li {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.demo-features li:last-child {
+  border-bottom: none;
+}
+
+/* ===== Контейнер демо ===== */
+.chat-demo__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-20);
+}
+
+.chat-demo__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.chat-demo__content {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-20);
+  box-shadow: var(--shadow-elev-strong);
+  overflow: hidden;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-demo__header {
+  background: var(--color-surface-2);
+  padding: var(--space-16) var(--space-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chat-demo__header h3 {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.chat-demo__close {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-8);
+  border-radius: var(--radius-8);
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-lg);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-demo__close:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.chat-demo__iframe {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== Адаптивные режимы демо ===== */
+
+/* Мобильный режим */
+.chat-demo__container--mobile .chat-demo__content {
+  width: 375px;
+  height: 667px;
+  border-radius: var(--radius-20);
+}
+
+/* Планшетный режим */
+.chat-demo__container--tablet .chat-demo__content {
+  width: 768px;
+  height: 600px;
+  border-radius: var(--radius-20);
+}
+
+/* Десктопный режим */
+.chat-demo__container--desktop .chat-demo__content {
+  width: 1200px;
+  height: 700px;
+  border-radius: var(--radius-20);
+}
+
+/* ===== Адаптивность ===== */
+@media (max-width: 768px) {
+  .chat-demo__controls {
+    margin: var(--space-16);
+    padding: var(--space-16);
+  }
+  
+  .demo-modes {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  
+  .chat-demo__container {
+    padding: var(--space-12);
+  }
+  
+  .chat-demo__container--mobile .chat-demo__content,
+  .chat-demo__container--tablet .chat-demo__content,
+  .chat-demo__container--desktop .chat-demo__content {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-demo h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .demo-mode-btn {
+    padding: var(--space-12);
+  }
+  
+  .demo-mode-btn__label {
+    font-size: var(--font-size-md);
+  }
+  
+  .demo-features {
+    padding: var(--space-16);
+  }
+}
+
+/* ===== Анимации ===== */
+.chat-demo__container {
+  animation: demoFadeIn 0.3s ease-out;
+}
+
+@keyframes demoFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chat-demo__content {
+  animation: demoSlideIn 0.3s ease-out;
+}
+
+@keyframes demoSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Улучшения для touch-устройств ===== */
+@media (hover: none) and (pointer: coarse) {
+  .demo-mode-btn {
+    min-height: 60px;
+  }
+  
+  .chat-demo__close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ===== Темная тема ===== */
+@media (prefers-color-scheme: dark) {
+  .chat-demo__overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* ===== Уменьшенная анимация ===== */
+@media (prefers-reduced-motion: reduce) {
+  .chat-demo__container,
+  .chat-demo__content,
+  .demo-mode-btn {
+    animation: none;
+    transition: none;
+  }
+}

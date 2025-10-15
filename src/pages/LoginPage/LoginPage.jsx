@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import supabase from '../../supabaseClient';
 import './LoginPage.css';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
 import bcrypt from 'bcryptjs';
 import { useAuth } from '../../components/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -130,7 +132,7 @@ return (
           </div>
           
           <form className="login-form" onSubmit={handleLoginSubmit}>
-            <input
+            <Input
               type="email"
               name="email"
               placeholder="Email"
@@ -139,7 +141,7 @@ return (
               className="input-field"
               required
             />
-            <input
+            <Input
               type="password"
               name="password"
               placeholder="Пароль"
@@ -148,9 +150,7 @@ return (
               className="input-field"
               required
             />
-            <button type="submit" className="login-btn">
-              Войти
-            </button>
+            <Button type="submit" variant="primary" size="md">Войти</Button>
           </form>
 
           <div className="divider">
@@ -158,7 +158,7 @@ return (
           </div>
 
           <form className="register-form" onSubmit={handleRegisterSubmit}>
-            <input
+            <Input
               type="email"
               name="email"
               placeholder="Email"
@@ -167,7 +167,7 @@ return (
               className="input-field"
               required
             />
-            <input
+            <Input
               type="text"
               name="name"
               placeholder="Ваше имя"
@@ -176,7 +176,7 @@ return (
               className="input-field"
               required
             />
-            <input
+            <Input
               type="password"
               name="password"
               placeholder="Пароль"
@@ -185,9 +185,7 @@ return (
               className="input-field"
               required
             />
-            <button type="submit" className="register-btn">
-              Зарегистрироваться
-            </button>
+            <Button type="submit" variant="secondary" size="md">Зарегистрироваться</Button>
           </form>
         </div>
         {successMessage && (

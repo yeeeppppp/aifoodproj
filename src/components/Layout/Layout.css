@@ -2,4 +2,60 @@ main {
   min-height: calc(100vh - 95px);
   padding-top: 95px;
   width: 100%;
+  transition: padding-top 0.3s ease;
+}
+
+/* Адаптивные стили для main контейнера */
+@media (max-width: 1200px) {
+  main {
+    min-height: calc(100vh - 95px);
+    padding-top: 95px;
+  }
+}
+
+@media (max-width: 1024px) {
+  main {
+    min-height: calc(100vh - 80px);
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    min-height: calc(100vh - 70px);
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    min-height: calc(100vh - 60px);
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 320px) {
+  main {
+    min-height: calc(100vh - 55px);
+    padding-top: 55px;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  main {
+    min-height: calc(100vh - 60px);
+    padding-top: 60px;
+  }
+}
+
+/* Дополнительные стили для мобильного меню */
+@media (max-width: 768px) {
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+  
+  body.mobile-menu-open main {
+    filter: blur(2px);
+    pointer-events: none;
+  }
 }

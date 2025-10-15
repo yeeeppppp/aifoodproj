@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import supabase from '../../supabaseClient';
 import { useAuth } from '../AuthContext';
 
@@ -6,7 +6,14 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const { userId } = useAuth();
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try {
+      const raw = localStorage.getItem('cart');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -39,6 +46,13 @@ export function CartProvider({ children }) {
     };
     fetchCart();
   }, [userId]);
+
+  // Persist to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } catch {}
+  }, [cart]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -203,6 +217,8 @@ export function CartProvider({ children }) {
     updateQuantity,
     orders,
     addOrder,
+    itemsCount: useMemo(() => cart.reduce((n, i) => n + (i.quantity || 0), 0), [cart]),
+    totalCost: useMemo(() => cart.reduce((sum, i) => sum + (parseFloat(i.price) || 0) * (i.quantity || 0), 0), [cart]),
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

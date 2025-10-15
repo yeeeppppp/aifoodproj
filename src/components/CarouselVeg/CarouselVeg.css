@@ -1,8 +1,8 @@
 .nameOfRow {
-    color: rgb(255, 255, 255);
+    color: var(--color-text);
     font-family: var(--font-family);
-    font-weight: 900;
-    font-size: 30px;
+    font-weight: var(--font-weight-black);
+    font-size: var(--font-size-2xl);
     margin-left: 80px;
     padding-top: 25px;
 }
@@ -24,11 +24,11 @@
 }
 
 .product-container {
-    border-radius: 15px;
+    border-radius: var(--radius-15);
     width: 255px;
     height: 426px;
     min-height: 412px;
-    background: #42413f;
+    background: var(--color-surface);
     margin-top: 25px;
     position: relative;
     flex-shrink: 0;
@@ -74,9 +74,9 @@
 
 .price {
     font-family: var(--font-family);
-    font-weight: 800;
-    font-size: 30px;
-    color: #65ad55;
+    font-weight: var(--font-weight-extrabold);
+    font-size: var(--font-size-2xl);
+    color: var(--color-accent);
 
     margin-left: 8px;
 }
@@ -93,15 +93,15 @@
     left: -10%;
     width: 40px;
     height: 1px;
-    background: #787878;
+    background: var(--color-muted);
     transform-origin: center;
 }
 
 span {
     font-family: var(--font-family);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     font-size: 15px;
-    color: #787878;
+    color: var(--color-muted);
     margin-left: 5px;
 }
 
@@ -109,18 +109,18 @@ span {
     margin-top: 5px;
     margin-left: 8px;
     font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 18px;
-    color: #fff;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-lg);
+    color: var(--color-text);
 }
 
 .Weight {
     position: absolute;
     bottom: 62px;
     font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 18px;
-    color: #787878;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-lg);
+    color: var(--color-muted);
 }
 
 .add-to-cart {

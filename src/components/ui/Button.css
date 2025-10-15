@@ -1,0 +1,26 @@
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-18);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.ui-button--primary { background: var(--color-accent); }
+.ui-button--primary:hover { background: var(--color-accent-hover); box-shadow: var(--shadow-elev-3); }
+.ui-button--secondary { background: var(--color-surface); }
+.ui-button--secondary:hover { background: var(--color-surface-hover); }
+.ui-button--ghost { background: transparent; }
+.ui-button--ghost:hover { background: rgba(255,255,255,0.06); }
+
+.ui-button--sm { padding: 8px 12px; font-size: var(--font-size-sm); }
+.ui-button--md { padding: 10px 16px; font-size: var(--font-size-md); }
+.ui-button--lg { padding: 12px 20px; font-size: var(--font-size-lg); }
+
+
+

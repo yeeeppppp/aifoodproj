@@ -1,0 +1,988 @@
+/* ===== LLamaChatV2 - Современный адаптивный чат ===== */
+
+/* CSS Custom Properties для чата */
+:root {
+  --chat-bg: var(--color-surface);
+  --chat-bg-secondary: var(--color-surface-2);
+  --chat-bg-tertiary: var(--color-surface-3);
+  --chat-text: var(--color-text);
+  --chat-text-muted: var(--color-text-muted);
+  --chat-accent: var(--color-accent);
+  --chat-accent-hover: var(--color-accent-hover);
+  --chat-border: var(--color-border);
+  --chat-shadow: var(--shadow-elev-3);
+  --chat-shadow-strong: var(--shadow-elev-strong);
+  
+  /* Размеры */
+  --chat-width-mobile: 100vw;
+  --chat-width-tablet: 400px;
+  --chat-width-desktop: 450px;
+  --chat-height-mobile: 100vh;
+  --chat-height-tablet: 600px;
+  --chat-height-desktop: 700px;
+  
+  /* Анимации */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Desktop Controls ===== */
+.desktop-controls {
+  position: fixed;
+  top: var(--space-20);
+  right: var(--space-20);
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.desktop-control-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  background: var(--chat-bg);
+  border: 1px solid var(--chat-border);
+  border-radius: var(--radius-12);
+  color: var(--chat-text);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-elev-2);
+  position: relative;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.desktop-control-btn:hover {
+  background: var(--chat-bg-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elev-3);
+}
+
+.desktop-control-btn--chat:hover {
+  border-color: var(--chat-accent);
+}
+
+.desktop-control-btn--cart:hover {
+  border-color: var(--color-brand);
+}
+
+.desktop-control-btn__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-danger);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  border: 2px solid var(--chat-bg);
+}
+
+/* ===== FAB (Floating Action Button) ===== */
+.fab-container {
+  position: fixed;
+  bottom: var(--space-20);
+  right: var(--space-20);
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--chat-accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--chat-shadow);
+  transition: all var(--transition-normal);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fab:hover {
+  background: var(--chat-accent-hover);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-elev-4);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fab--cart {
+  background: var(--color-brand);
+}
+
+.fab--cart:hover {
+  background: #e69500;
+}
+
+.fab__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-danger);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  border: 2px solid var(--chat-bg);
+}
+
+/* ===== Основной контейнер чата ===== */
+.chat-v2 {
+  position: fixed;
+  background: var(--chat-bg);
+  border-radius: var(--radius-20);
+  box-shadow: var(--chat-shadow-strong);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--chat-border);
+  z-index: var(--z-modal);
+  transition: all var(--transition-normal);
+}
+
+/* Мобильная версия */
+.chat-v2--mobile {
+  width: var(--chat-width-mobile);
+  height: var(--chat-height-mobile);
+  bottom: 0;
+  right: 0;
+  border-radius: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chat-v2--mobile.chat-v2--open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Планшетная версия */
+.chat-v2--tablet {
+  width: var(--chat-width-tablet);
+  height: var(--chat-height-tablet);
+  bottom: var(--space-20);
+  right: var(--space-20);
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chat-v2--tablet.chat-v2--open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Десктопная версия */
+.chat-v2--desktop {
+  width: var(--chat-width-desktop);
+  height: var(--chat-height-desktop);
+  bottom: var(--space-20);
+  right: var(--space-20);
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chat-v2--desktop.chat-v2--open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== Заголовок чата ===== */
+.chat-v2__header {
+  background: var(--chat-bg-secondary);
+  padding: var(--space-16) var(--space-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--chat-border);
+  flex-shrink: 0;
+}
+
+.chat-v2__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font-weight: var(--font-weight-semibold);
+  color: var(--chat-text);
+  font-size: var(--font-size-lg);
+}
+
+.chat-v2__close {
+  background: none;
+  border: none;
+  color: var(--chat-text-muted);
+  cursor: pointer;
+  padding: var(--space-8);
+  border-radius: var(--radius-8);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-v2__close:hover {
+  background: var(--chat-bg-tertiary);
+  color: var(--chat-text);
+}
+
+/* ===== Контейнер сообщений ===== */
+.chat-v2__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  scroll-behavior: smooth;
+}
+
+.chat-v2__messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-v2__messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-v2__messages::-webkit-scrollbar-thumb {
+  background: var(--chat-text-muted);
+  border-radius: 3px;
+  opacity: 0.3;
+}
+
+.chat-v2__messages::-webkit-scrollbar-thumb:hover {
+  opacity: 0.6;
+}
+
+/* ===== Приветственное сообщение ===== */
+.chat-v2__welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-20);
+}
+
+.welcome-message {
+  text-align: center;
+  max-width: 300px;
+}
+
+.welcome-message h3 {
+  color: var(--chat-text);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-12);
+}
+
+.welcome-message p {
+  color: var(--chat-text-muted);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+}
+
+/* ===== Пузыри сообщений ===== */
+.message-bubble {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+.message-bubble--user {
+  align-self: flex-end;
+}
+
+.message-bubble--ai {
+  align-self: flex-start;
+}
+
+.message-bubble__content {
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-18);
+  font-size: var(--font-size-md);
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
+  transition: all var(--transition-fast);
+}
+
+.message-bubble--user .message-bubble__content {
+  background: var(--chat-accent);
+  color: white;
+  border-bottom-right-radius: var(--radius-6);
+}
+
+.message-bubble--ai .message-bubble__content {
+  background: var(--chat-bg-secondary);
+  color: var(--chat-text);
+  border-bottom-left-radius: var(--radius-6);
+  border: 1px solid var(--chat-border);
+}
+
+.message-bubble__time {
+  font-size: var(--font-size-xs);
+  color: var(--chat-text-muted);
+  margin-top: var(--space-4);
+  padding: 0 var(--space-8);
+}
+
+.message-bubble--user .message-bubble__time {
+  text-align: right;
+}
+
+.message-bubble--ai .message-bubble__time {
+  text-align: left;
+}
+
+/* ===== Индикатор печати ===== */
+.message-bubble--loading .message-bubble__content {
+  background: var(--chat-bg-secondary);
+  border: 1px solid var(--chat-border);
+  padding: var(--space-16);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--chat-text-muted);
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Поле ввода ===== */
+.chat-v2__input {
+  padding: var(--space-16) var(--space-20);
+  background: var(--chat-bg-secondary);
+  border-top: 1px solid var(--chat-border);
+  flex-shrink: 0;
+}
+
+.input-group {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-end;
+}
+
+.chat-input-v2 {
+  flex: 1;
+  padding: var(--space-12) var(--space-16);
+  border: 2px solid transparent;
+  border-radius: var(--radius-20);
+  background: var(--chat-bg-tertiary);
+  color: var(--chat-text);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family);
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  transition: all var(--transition-fast);
+}
+
+.chat-input-v2:focus {
+  outline: none;
+  border-color: var(--chat-accent);
+  background: var(--chat-bg);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.chat-input-v2::placeholder {
+  color: var(--chat-text-muted);
+}
+
+.send-btn-v2 {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.send-btn-v2:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.send-btn-v2:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* ===== Контейнер корзины ===== */
+.cart-v2 {
+  position: fixed;
+  background: var(--chat-bg);
+  border-radius: var(--radius-20);
+  box-shadow: var(--chat-shadow-strong);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--chat-border);
+  z-index: var(--z-modal);
+  transition: all var(--transition-normal);
+}
+
+/* Мобильная версия корзины */
+.cart-v2--mobile {
+  width: var(--chat-width-mobile);
+  height: var(--chat-height-mobile);
+  bottom: 0;
+  right: 0;
+  border-radius: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cart-v2--mobile.cart-v2--open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Планшетная версия корзины */
+.cart-v2--tablet {
+  width: var(--chat-width-tablet);
+  height: var(--chat-height-tablet);
+  bottom: var(--space-20);
+  right: var(--space-20);
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cart-v2--tablet.cart-v2--open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Десктопная версия корзины */
+.cart-v2--desktop {
+  width: var(--chat-width-desktop);
+  height: var(--chat-height-desktop);
+  bottom: var(--space-20);
+  right: var(--space-20);
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cart-v2--desktop.cart-v2--open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== Заголовок корзины ===== */
+.cart-v2__header {
+  background: var(--chat-bg-secondary);
+  padding: var(--space-16) var(--space-20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--chat-border);
+  flex-shrink: 0;
+}
+
+.cart-v2__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font-weight: var(--font-weight-semibold);
+  color: var(--chat-text);
+  font-size: var(--font-size-lg);
+}
+
+.cart-v2__close {
+  background: none;
+  border: none;
+  color: var(--chat-text-muted);
+  cursor: pointer;
+  padding: var(--space-8);
+  border-radius: var(--radius-8);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-v2__close:hover {
+  background: var(--chat-bg-tertiary);
+  color: var(--chat-text);
+}
+
+/* ===== Содержимое корзины ===== */
+.cart-v2__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-16);
+}
+
+.cart-v2__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+/* ===== Элементы корзины ===== */
+.cart-item-v2 {
+  display: flex;
+  gap: var(--space-12);
+  padding: var(--space-12);
+  background: var(--chat-bg-secondary);
+  border-radius: var(--radius-12);
+  border: 1px solid var(--chat-border);
+  transition: all var(--transition-fast);
+  animation: cartItemSlideIn 0.3s ease-out;
+}
+
+.cart-item-v2:hover {
+  background: var(--chat-bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elev-2);
+}
+
+.cart-item-v2__image {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-8);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-item-v2__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-fast);
+}
+
+.cart-item-v2:hover .cart-item-v2__image img {
+  transform: scale(1.05);
+}
+
+.cart-item-v2__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.cart-item-v2__name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--chat-text);
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cart-item-v2__weight {
+  font-size: var(--font-size-sm);
+  color: var(--chat-text-muted);
+  margin: 0;
+}
+
+.cart-item-v2__price {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--chat-accent);
+  margin-top: auto;
+}
+
+.cart-item-v2__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  flex-shrink: 0;
+}
+
+.quantity-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--chat-bg-tertiary);
+  color: var(--chat-text);
+  border-radius: var(--radius-6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.quantity-btn:hover {
+  background: var(--chat-accent);
+  color: white;
+  transform: scale(1.1);
+}
+
+.quantity-btn:active {
+  transform: scale(0.95);
+}
+
+.quantity-display {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--chat-text);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ===== Футер корзины ===== */
+.cart-v2__footer {
+  padding: var(--space-16) var(--space-20);
+  background: var(--chat-bg-secondary);
+  border-top: 1px solid var(--chat-border);
+  flex-shrink: 0;
+}
+
+.cart-v2__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-16);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--chat-text);
+}
+
+.cart-v2__total-price {
+  color: var(--chat-accent);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.order-btn-v2 {
+  width: 100%;
+  padding: var(--space-16);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-12);
+  transition: all var(--transition-fast);
+}
+
+.order-btn-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elev-3);
+}
+
+/* ===== Анимации ===== */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cartItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===== Адаптивные улучшения ===== */
+
+/* Планшеты в портретной ориентации */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .chat-v2--tablet {
+    width: 350px;
+    height: 500px;
+  }
+  
+  .cart-v2--tablet {
+    width: 350px;
+    height: 500px;
+    right: calc(350px + var(--space-20));
+  }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+  .desktop-controls {
+    display: none;
+  }
+  
+  .fab-container {
+    bottom: var(--space-16);
+    right: var(--space-16);
+  }
+  
+  .fab {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .chat-v2__messages {
+    padding: var(--space-16);
+  }
+  
+  .message-bubble {
+    max-width: 85%;
+  }
+  
+  .cart-item-v2 {
+    padding: var(--space-10);
+  }
+  
+  .cart-item-v2__image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .cart-item-v2__name {
+    font-size: var(--font-size-sm);
+  }
+  
+  .cart-item-v2__price {
+    font-size: var(--font-size-md);
+  }
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+  .fab-container {
+    bottom: var(--space-12);
+    right: var(--space-12);
+  }
+  
+  .fab {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .chat-v2__header,
+  .cart-v2__header {
+    padding: var(--space-12) var(--space-16);
+  }
+  
+  .chat-v2__messages,
+  .cart-v2__content {
+    padding: var(--space-12);
+  }
+  
+  .chat-v2__input,
+  .cart-v2__footer {
+    padding: var(--space-12) var(--space-16);
+  }
+  
+  .message-bubble__content {
+    padding: var(--space-10) var(--space-12);
+    font-size: var(--font-size-sm);
+  }
+  
+  .cart-item-v2 {
+    padding: var(--space-8);
+  }
+  
+  .cart-item-v2__image {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 320px) {
+  .fab {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .message-bubble {
+    max-width: 90%;
+  }
+  
+  .message-bubble__content {
+    padding: var(--space-8) var(--space-10);
+    font-size: var(--font-size-xs);
+  }
+  
+  .cart-item-v2__image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .quantity-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ===== Улучшения для touch-устройств ===== */
+@media (hover: none) and (pointer: coarse) {
+  .fab,
+  .quantity-btn,
+  .send-btn-v2,
+  .order-btn-v2 {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .chat-input-v2 {
+    font-size: 16px; /* Предотвращает зум на iOS */
+  }
+  
+  .message-bubble__content {
+    padding: var(--space-14) var(--space-16);
+  }
+}
+
+/* ===== Темная тема ===== */
+@media (prefers-color-scheme: dark) {
+  .chat-input-v2:focus {
+    box-shadow: 0 0 0 3px rgba(101, 173, 85, 0.2);
+  }
+  
+  .send-btn-v2:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(101, 173, 85, 0.4);
+  }
+}
+
+/* ===== Высокий контраст ===== */
+@media (prefers-contrast: high) {
+  .chat-v2,
+  .cart-v2 {
+    border: 2px solid var(--chat-text);
+  }
+  
+  .message-bubble--ai .message-bubble__content {
+    border: 2px solid var(--chat-text);
+  }
+  
+  .cart-item-v2 {
+    border: 2px solid var(--chat-text);
+  }
+}
+
+/* ===== Уменьшенная анимация ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .chat-v2,
+  .cart-v2 {
+    transition: opacity var(--transition-fast);
+  }
+}
+
+/* ===== Улучшения производительности ===== */
+.chat-v2,
+.cart-v2,
+.message-bubble,
+.cart-item-v2 {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+  will-change: transform;
+}
+
+/* ===== Accessibility ===== */
+.fab:focus-visible,
+.quantity-btn:focus-visible,
+.send-btn-v2:focus-visible,
+.order-btn-v2:focus-visible,
+.chat-v2__close:focus-visible,
+.cart-v2__close:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ===== Улучшенная прокрутка ===== */
+.chat-v2__messages,
+.cart-v2__content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--chat-text-muted) transparent;
+}
+
+/* ===== Поддержка safe-area для iOS ===== */
+@supports (padding: max(0px)) {
+  .chat-v2--mobile {
+    padding-bottom: max(var(--space-20), env(safe-area-inset-bottom));
+  }
+  
+  .cart-v2--mobile {
+    padding-bottom: max(var(--space-20), env(safe-area-inset-bottom));
+  }
+  
+  .fab-container {
+    bottom: max(var(--space-20), env(safe-area-inset-bottom));
+  }
+}

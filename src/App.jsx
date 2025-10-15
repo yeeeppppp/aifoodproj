@@ -1,39 +1,32 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
 import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
-import PaymentPage from './pages/PaymentPage/PaymentPage';
+const ProfilePage = lazy(() => import('./pages/ProfilePage/ProfilePage'));
+const PaymentPage = lazy(() => import('./pages/PaymentPage/PaymentPage'));
 import { CartProvider } from './components/Carousel/CartContext';
 import { AuthProvider } from './components/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Navigation from './components/Navigation/Navigation';
+import AppLayout from './layouts/AppLayout';
+import PublicLayout from './layouts/PublicLayout';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div>
+          <Suspense fallback={null}>
             <Routes>
-              <Route path='/' element={<LoginPage/>}/>
-              <Route path='/menu' element={
-                <ProtectedRoute>
-                  <MainPage/>
-                </ProtectedRoute>
-              }/>
-              <Route path='/profile' element={
-                <ProtectedRoute>
-                  <Navigation/>
-                  <ProfilePage/>
-                </ProtectedRoute>
-              }/>
-              <Route path='/payment' element={
-                <ProtectedRoute>
-                  <PaymentPage/>
-                </ProtectedRoute>
-              }/>
+              <Route element={<PublicLayout/>}>
+                <Route path='/' element={<LoginPage/>}/>
+              </Route>
+              <Route element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
+                <Route path='/menu' element={<MainPage/>}/>
+                <Route path='/profile' element={<ProfilePage/>}/>
+                <Route path='/payment' element={<PaymentPage/>}/>
+              </Route>
             </Routes>
-          </div>
+          </Suspense>
         </Router>
       </CartProvider>
     </AuthProvider>

@@ -2,7 +2,7 @@
   font-family: var(--font-family);
   font-weight: 900;
   font-size: 36px;
-  color: #fff;
+  color: var(--color-text);
   margin-top: 125px;
   margin-left: 65px;
 }
@@ -12,7 +12,7 @@
   border-radius: 28px;
   width: 515px;
   height: 117px;
-  background: #42413f;
+  background: var(--color-surface);
   margin-left: 105px;
   margin-top: 10px;
 }
@@ -43,7 +43,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 24px;
-  color: #fff;
+  color: var(--color-text);
   letter-spacing: 1px;
 }
 
@@ -51,7 +51,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 24px;
-  color: #838383;
+  color: var(--color-muted);
   margin-top: -10px;
 }
 
@@ -59,7 +59,7 @@
   font-family: var(--font-family);
   font-weight: 600;
   font-size: 24px;
-  color: #fff;
+  color: var(--color-text);
   letter-spacing: 1px;
 }
 
@@ -67,7 +67,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
-  color: #65ad55;
+  color: var(--color-accent);
   margin-top: -3px;
 }
 
@@ -75,7 +75,7 @@
   border-radius: 28px;
   width: 702px;
   height: 772px;
-  background: #42413f;
+  background: var(--color-surface);
 
   margin-top: 185px;
 }
@@ -124,7 +124,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 18px;
-  color: #fff;
+  color: var(--color-text);
   overflow-wrap: break-word;
   word-break: normal;
   white-space: normal;
@@ -138,7 +138,7 @@
   font-family: var(--font-family);
   font-weight: 800;
   font-size: 20px;
-  color: #65ad55;
+  color: var(--color-accent);
 }
 
 .quantity-2 {
@@ -156,7 +156,7 @@
   margin-left: 540px;
   margin-top: 25px;
 
-  background: #353535;
+  background: var(--color-surface-3);
   justify-content: center;
   align-items: center;
 }
@@ -165,7 +165,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 12px;
-  color: #fff;
+  color: var(--color-text);
 }
 
 
@@ -178,7 +178,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
-  color: #bcb9b9;
+  color: var(--color-text-muted);
 }
 
 .order-status {
@@ -193,14 +193,14 @@
   font-family: var(--font-family);
   font-weight: 900;
   font-size: 32px;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .border-line {
   border: 1px solid #fff;
   width: 629px;
   height: 2px;
-  color: white;
+  color: var(--color-text);
   margin: 0 auto;
   margin-top: 30px;
 }
@@ -209,7 +209,7 @@
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 18px;
-  color: #bcb9b9;
+  color: var(--color-text-muted);
 }
 
 .details-str {
