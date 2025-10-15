@@ -69,7 +69,13 @@ export function CartProvider({ children }) {
     }
     console.log('Попытка добавить в корзину:', item);
     try {
-      const itemPrice = item.price_numeric || parseFloat(item.price.replace(/\D/g, '')) || 0;
+      const itemPrice = (
+        typeof item.price_numeric === 'number' ? item.price_numeric : undefined
+      ) ?? (
+        typeof item.price === 'number' ? item.price : (
+          typeof item.price === 'string' ? parseFloat(item.price.replace(/[^\d.]/g, '')) : 0
+        )
+      );
       const itemQuantity = item.quantity || 1;
 
       const { data, error } = await supabase
@@ -79,8 +85,6 @@ export function CartProvider({ children }) {
           item_name: item.name,
           item_price: itemPrice,
           quantity: itemQuantity,
-          item_image: item.image,
-          item_image_url: item.image_url,
         }, {
           onConflict: ['users_id', 'item_name'],
           ignoreDuplicates: false // Обновлять quantity, если конфликт

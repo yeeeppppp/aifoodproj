@@ -4,12 +4,8 @@ import Eggs from "../../assets/Eggs.png";
 import Milk from "../../assets/MilkPerviy.png";
 import CarouselButton from "../../assets/CarouselButton.png";
 import { CartContext } from '../../components/Carousel/CartContext';
-import { createClient } from '@supabase/supabase-js';
+import supabase from '../../supabaseClient';
 import spinner from '../../assets/Spinner3.gif';
-
-const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 function CarouselVeg() {
     const milkStuffRef = useRef(null);

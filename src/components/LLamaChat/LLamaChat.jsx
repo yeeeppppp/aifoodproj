@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
-import { createClient } from '@supabase/supabase-js'
+import supabase from '../../supabaseClient'
 import "./LLamaChat.css";
 import Payment from "../../pages/PaymentPage/PaymentPage";
 import { a } from 'react-spring';
 
-const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// use shared supabase client
 
 function LLamaChat() {
     const [messages, setMessages] = useState([]);
@@ -59,16 +57,51 @@ function LLamaChat() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('pyatorochka_products')
-                    .select('*');
-                if (error) {
-                    console.error('Ошибка загрузки продуктов для ИИ:', error.message);
-                } else {
-                    console.log('Загружено продуктов для ИИ:', data.length);
-                    console.log('Структура продуктов:', data[0]);
-                    setProducts(data);
+                const [milkRes, meatRes] = await Promise.all([
+                    supabase.from('new_pyatorkochka_milk').select('*'),
+                    supabase.from('new_pyaterochka_meat').select('*')
+                ]);
+
+                const allErrors = [milkRes && milkRes.error, meatRes && meatRes.error].filter(Boolean);
+                if (allErrors.length > 0) {
+                    allErrors.forEach(e => console.error('Ошибка загрузки продуктов для ИИ:', e.message));
                 }
+
+                const milk = ((milkRes && milkRes.data) || []).map(p => ({
+                    ...p,
+                    name: p.name || p.product_name || p.title,
+                    price_numeric: p.price_numeric || p.price || 0,
+                    image: p.image || p.image_url,
+                    size: p.size || p.weight
+                }));
+
+                const meat = ((meatRes && meatRes.data) || []).map(p => ({
+                    ...p,
+                    name: p.name || p.product_name || p.title,
+                    price_numeric: p.price_numeric || p.price || 0,
+                    image: p.image || p.image_url,
+                    size: p.size || p.weight
+                }));
+
+                const maxLen = Math.max(meat.length, milk.length);
+                const interleaved = [];
+                for (let i = 0; i < maxLen; i++) {
+                    if (i < meat.length) interleaved.push(meat[i]);
+                    if (i < milk.length) interleaved.push(milk[i]);
+                }
+                const merged = interleaved;
+
+                const seen = new Set();
+                const uniqueByName = merged.filter(p => {
+                    const key = (p.name || '').toLowerCase();
+                    if (!key) return true;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+
+                console.log('Загружено продуктов для ИИ (совмещённый список):', uniqueByName.length);
+                setProducts(uniqueByName);
             } catch (error) {
                 console.error('Общая ошибка загрузки для ИИ:', error);
             }
@@ -98,6 +131,9 @@ function LLamaChat() {
                             Команда [add_to_cart: ...] не должна быть частью читаемого текста, а только служебной инструкцией.
                             Количество по умолчанию 1, если не указано. Если товара нет в списке, ответь "Товар не найден в списке" БЕЗ команды.
                             Добавляй товары в корзину ТОЛЬКО если пользователь об этом просит.
+
+                            Пример формата ответа c командой:
+                            "Купаты свиные Рестория фирменные — 148₽.\n[add_to_cart: Купаты свиные Рестория фирменные, 1]"
 
                             ДОПОЛНИТЕЛЬНО: Структура ответов:
                             - Делай ответы короткими и структурированными.
@@ -195,6 +231,22 @@ function LLamaChat() {
             }
             if (commandsFound === 0) {
                 console.log('Команды add_to_cart не найдены в ответе ИИ');
+                const addHint = /(добав(ь|ить)|полож(и|ить)|в корзину)/i;
+                if (addHint.test(userMessage.text)) {
+                    const tokens = userMessage.text.toLowerCase().split(/[^\p{L}\p{N}%]+/u).filter(Boolean);
+                    let fallbackProduct = null;
+                    fallbackProduct = products.find(p => p.name && p.name.toLowerCase() === userMessage.text.toLowerCase());
+                    if (!fallbackProduct) {
+                        fallbackProduct = products.find(p => {
+                            const n = (p.name || '').toLowerCase();
+                            return tokens.every(t => n.includes(t));
+                        });
+                    }
+                    if (fallbackProduct) {
+                        addToCart({ ...fallbackProduct, quantity: 1, price: fallbackProduct.price_numeric || fallbackProduct.price || 0 });
+                        console.log('Добавлен в корзину по эвристике:', fallbackProduct.name);
+                    }
+                }
             }
         } catch (error) {
             console.error('Ошибка обработки ответа ИИ:', error);

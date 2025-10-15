@@ -78,11 +78,13 @@
   background: #42413f;
 
   margin-top: 185px;
+  margin-left: 50px;
+  margin-right: 105px;
 }
 
 .orders-container {
   display: flex;
-  gap: clamp(30px, 30vw, 700px);
+  gap: clamp(50px, 30vw, 450px);
 }
 
 .order-img img{
@@ -153,7 +155,7 @@
   height: 30px;
 
   display: flex;
-  margin-left: 540px;
+  margin-left: 495px;
   margin-top: 25px;
 
   background: #353535;

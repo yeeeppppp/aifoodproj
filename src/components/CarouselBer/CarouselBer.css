@@ -13,7 +13,7 @@
     overflow: hidden;
 }
 
-.milk-stuff {
+.meat-stuff {
     margin-left: 50px;
     padding-top: 25px;
     display: flex;
@@ -134,4 +134,14 @@ span {
     cursor: pointer;
     width: 239px;
     height: 47px;
+}
+
+.meat_image {
+    margin-left: 8px;
+    margin-top: 8px;
+    z-index: 1;
+    position: relative;
+    width: 239px;
+    height: 194px;
+    border-radius: 10px;
 }

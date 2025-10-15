@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Navigation.css';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import supabase from '../../supabaseClient';
 
 export default function Navigation() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -16,14 +12,33 @@ export default function Navigation() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('pyatorochka_products')
-                    .select('*');
-                if (error) {
-                    console.error('Ошибка загрузки продуктов:', error.message);
-                } else {
-                    setProducts(data);
-                }
+                const [milkRes, meatRes] = await Promise.all([
+                    supabase.from('new_pyatorkochka_milk').select('*'),
+                    supabase.from('new_pyaterochka_meat').select('*')
+                ]);
+
+                if (milkRes.error) console.error('Ошибка загрузки молочных:', milkRes.error.message);
+                if (meatRes.error) console.error('Ошибка загрузки мясных:', meatRes.error.message);
+
+                const milk = (milkRes.data || []).map(p => ({
+                    ...p,
+                    name: p.name || p.product_name || p.title
+                }));
+                const meat = (meatRes.data || []).map(p => ({
+                    ...p,
+                    name: p.name || p.product_name || p.title
+                }));
+
+                const merged = [...milk, ...meat];
+                const seen = new Set();
+                const uniqueByName = merged.filter(p => {
+                    const key = (p.name || '').toLowerCase();
+                    if (!key) return true;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+                setProducts(uniqueByName);
             } catch (error) {
                 console.error('Общая ошибка загрузки:', error);
             }
