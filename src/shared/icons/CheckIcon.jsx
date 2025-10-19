@@ -8,3 +8,9 @@ export default function CheckIcon({ size = 18, color = 'currentColor', ...rest }
   );
 }
 
+
+
+
+
+
+

@@ -1,27 +1,11 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useCart } from '../Carousel/CartContext';
-import { createClient } from '@supabase/supabase-js'
+import supabase from '../../supabaseClient';
 import "./LLamaChat.css";
-import { useNavigate } from 'react-router-dom';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import { a } from 'react-spring';
-
-const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 function LLamaChat() {
-    const navigate = useNavigate();
-    const [messages, setMessages] = useState(() => {
-        try {
-            const raw = localStorage.getItem('chat_history');
-            return raw ? JSON.parse(raw) : [];
-        } catch {
-            return [];
-        }
-    });
+    const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -227,7 +211,6 @@ function LLamaChat() {
 
     useEffect(() => {
         scrollToBottom();
-        try { localStorage.setItem('chat_history', JSON.stringify(messages)); } catch {}
     }, [messages]);
 
     const toggleChat = () => {
@@ -245,7 +228,9 @@ function LLamaChat() {
             console.log('Корзина пуста');
             return;
         }
-        navigate('/payment');
+        await addOrder();
+        console.log('Вызов addOrder завершён');
+        setCart([]);
     };
 
     return (
@@ -266,7 +251,7 @@ function LLamaChat() {
                 </div>
                 {!isCollapsed && (
                     <>
-                            <div className="messages-container" role="log" aria-live="polite">
+                        <div className="messages-container">
                             {messages.map((msg, index) => (
                                 <div key={index} className={`message ${msg.isUser ? 'user-message' : 'ai-message'}`}>
                                     <div className="message-content">
@@ -285,23 +270,19 @@ function LLamaChat() {
                         </div>
 
                         <div className="input-container">
-                            <Input 
+                            <input 
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                        e.preventDefault();
-                                        handleSend();
-                                    }
-                                }}
+                                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                 disabled={isLoading}
                                 placeholder="Введите текст..."
-                                className="chat-input ui-input"
-                                aria-label="Поле ввода сообщения"
+                                className="chat-input"
                             />
-                            <Button onClick={handleSend} disabled={isLoading || !inputText.trim()} className="send-button" aria-label="Отправить сообщение" variant="primary" size="md">
-                                Отправить
-                            </Button>
+                            <button onClick={handleSend} disabled={isLoading} className="send-button">
+                                <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.1189 8.94102L2.48763 0.214321C1.17494 -0.520371 -0.34501 0.7519 0.0695222 2.2392L2.21127 10.0162C2.29763 10.3387 2.29763 10.6613 2.21127 10.9838L0.0695222 18.7608C-0.34501 20.2481 1.17494 21.5204 2.48763 20.7857L18.1189 12.059C18.3856 11.9078 18.6081 11.685 18.7632 11.4138C18.9182 11.1426 19 10.8332 19 10.5179C19 10.2027 18.9182 9.8932 18.7632 9.62204C18.6081 9.35088 18.3856 9.12803 18.1189 8.97686V8.94102Z" fill="white" />
+                                </svg>
+                            </button>
                         </div>
                     </>
                 )}
@@ -360,9 +341,8 @@ function LLamaChat() {
                                 await handleOrder();
                                 setCart([]);
                             }}
-                            disabled={totalCost === 0}
                         >
-                            <span>{totalCost === 0 ? 'Добавьте товары' : 'Заказать'}</span>
+                            <span>Заказать</span>
                             <span className="end">{totalCost}₽</span>
                         </button>
                 ) : null}

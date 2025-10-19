@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Navigation.css';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://wqhjdysjjhdyhrcgogqt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import supabase from '../../supabaseClient';
 
 export default function Navigation() {
     const [searchTerm, setSearchTerm] = useState('');

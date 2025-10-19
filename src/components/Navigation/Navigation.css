@@ -3,7 +3,11 @@
     align-items: center;
     justify-content: space-between;
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 3001;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     background: var(--color-bg);
 
     width: 100vw;

@@ -6,3 +6,9 @@ export default function Skeleton({ width = '100%', height = 16, radius = '8px', 
   return <div className={`ui-skeleton ${className || ''}`} style={style} />;
 }
 
+
+
+
+
+
+
