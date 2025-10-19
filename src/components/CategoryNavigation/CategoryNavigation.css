@@ -45,6 +45,7 @@
 .category-navigation__inner {
   max-width: var(--container-max);
   margin: 0 auto;
+  margin-left: 11.111%; /* отступ слева 1/9 экрана */
   padding: 8px var(--page-padding-x);
   display: flex;
   gap: 10px;
@@ -146,6 +147,12 @@
 }
 
 /* Мобильные стили */
+@media (max-width: 1200px) {
+  .category-navigation__inner {
+    margin-left: 10%; /* уменьшаем отступ слева на планшетах */
+  }
+}
+
 @media (max-width: 768px) {
   .category-navigation.sticky {
     top: var(--nav-height);
@@ -155,6 +162,7 @@
   .category-navigation__inner {
     padding: 4px var(--page-padding-x);
     gap: 8px;
+    margin-left: 5%; /* минимальный отступ слева на мобильных */
   }
   
   .category-pill {
@@ -167,6 +175,7 @@
   .category-navigation__inner {
     padding: 4px 12px;
     gap: 6px;
+    margin-left: 2.5%; /* минимальный отступ слева на очень маленьких экранах */
   }
   
   .category-pill {

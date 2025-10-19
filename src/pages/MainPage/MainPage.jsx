@@ -16,21 +16,25 @@ function MainPage() {
         <Carousel 
           title="Горячие предложения"
           tableName="new_pyatorkochka_milk"
+          itemsPerView={4}
         />
         
         <Carousel 
           title="Купить снова"
-          tableName="pyatorochka_products"
+          tableName="new_pyatorkochka_milk"
+          itemsPerView={4}
         />
         
         <Carousel 
           title="Часто берут вместе"
           tableName="new_pyatorkochka_milk"
+          itemsPerView={4}
         />
         
         <Carousel 
           title="Смарт‑наборы"
-          tableName="pyatorochka_products"
+          tableName="new_pyatorkochka_milk"
+          itemsPerView={4}
         />
       </main>
       <LLamaChat />
